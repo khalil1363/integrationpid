@@ -8,8 +8,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { CoursesComponent } from './courses/courses.component';
 import { ChatComponent } from './chat/chat.component';
 import { LayoutComponent } from './layout/layout.component';
+import { EvaluationsListComponent } from './evaluations-list/evaluations-list.component';
+import { DeadlineWarningDialogComponent } from './evaluations-list/deadline-warning-dialog.component';
+import { TakeEvaluationComponent } from './take-evaluation/take-evaluation.component';
+import { EvaluationResultsComponent } from './evaluation-results/evaluation-results.component';
+import { CertificateComponent } from './certificate/certificate.component';
+import { CertificateVerifyComponent } from './certificate/certificate-verify.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { QRCodeModule } from 'angularx-qrcode';
 
 
 @NgModule({
@@ -18,7 +25,13 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     ProfileComponent,
     CoursesComponent,
     ChatComponent,
-    LayoutComponent
+    LayoutComponent,
+    EvaluationsListComponent,
+    DeadlineWarningDialogComponent,
+    TakeEvaluationComponent,
+    EvaluationResultsComponent,
+    CertificateComponent,
+    CertificateVerifyComponent
   ],
   imports: [
     CommonModule,
@@ -26,7 +39,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     ReactiveFormsModule,
     FrontofficeRoutingModule,
     SharedModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    QRCodeModule
   ]
 })
 export class FrontofficeModule { }

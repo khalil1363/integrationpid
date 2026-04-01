@@ -6,6 +6,10 @@ import { UserManagementComponent } from './user-management/user-management.compo
 import { CoursesManagementComponent } from './courses-management/courses-management.component';
 import { ClubsManagementComponent } from './clubs-management/clubs-management.component';
 import { BackofficeProfileComponent } from './profile/backoffice-profile.component';
+import { EvaluationsManagementComponent } from './evaluations-management/evaluations-management.component';
+import { EvaluationFormComponent } from './evaluation-form/evaluation-form.component';
+import { EvaluationQuestionsComponent } from './evaluation-questions/evaluation-questions.component';
+import { EvaluationAttemptsComponent } from './evaluation-attempts/evaluation-attempts.component';
 
 const routes: Routes = [
   {
@@ -17,6 +21,11 @@ const routes: Routes = [
       { path: 'users', component: UserManagementComponent },
       { path: 'courses', component: CoursesManagementComponent },
       { path: 'clubs', component: ClubsManagementComponent },
+      { path: 'evaluations', component: EvaluationsManagementComponent },
+      { path: 'evaluations/new', component: EvaluationFormComponent },
+      { path: 'evaluations/:id', component: EvaluationFormComponent },
+      { path: 'evaluations/:id/questions', component: EvaluationQuestionsComponent },
+      { path: 'evaluations/:id/attempts', component: EvaluationAttemptsComponent },
       { path: 'profile', component: BackofficeProfileComponent }
     ]
   }

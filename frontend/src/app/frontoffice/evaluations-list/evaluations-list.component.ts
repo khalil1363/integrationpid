@@ -8,6 +8,7 @@ import { CurrentUserService } from '../../core/services/current-user.service';
 import { getDisplayUploadUrl } from '../../core/utils/upload-url.util';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeadlineWarningDialogComponent } from './deadline-warning-dialog.component';
+import { PageEvent } from '@angular/material/paginator';
 
 const PLACEHOLDER_GRADIENT = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
@@ -166,7 +167,7 @@ export class EvaluationsListComponent implements OnInit {
     return this.filteredEvaluations.length;
   }
 
-  onPageChange(event: { pageIndex: number; pageSize: number }): void {
+  onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }

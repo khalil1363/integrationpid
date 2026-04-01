@@ -17,6 +17,7 @@ export class LayoutComponent implements OnInit {
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', routerLink: '/backoffice/dashboard' },
     { id: 'users', label: 'User Management', icon: 'people', routerLink: '/backoffice/users' },
     { id: 'courses', label: 'Course Management', icon: 'school', routerLink: '/backoffice/courses' },
+    { id: 'evaluations', label: 'Evaluations', icon: 'assignment', routerLink: '/backoffice/evaluations' },
     { id: 'clubs', label: 'Club Management', icon: 'groups', routerLink: '/backoffice/clubs' },
     { id: 'reports', label: 'Reports', icon: 'assessment', routerLink: '/backoffice/reports' },
     { id: 'settings', label: 'Settings', icon: 'settings', routerLink: '/backoffice/settings' }

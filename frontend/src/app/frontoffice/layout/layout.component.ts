@@ -22,6 +22,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   frontofficeMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', routerLink: '/frontoffice/dashboard' },
+    { id: 'evaluations', label: 'Evaluations', icon: 'assignment', routerLink: '/frontoffice/evaluations' },
+    { id: 'certificate', label: 'My Certificate', icon: 'workspace_premium', routerLink: '/frontoffice/certificate' },
     { id: 'profile', label: 'Profile', icon: 'person', routerLink: '/frontoffice/profile' },
     { id: 'courses', label: 'Courses', icon: 'school', routerLink: '/frontoffice/courses' },
     { id: 'chat', label: 'Chat', icon: 'chat', routerLink: '/frontoffice/chat' },

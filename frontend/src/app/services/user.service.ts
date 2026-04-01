@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_URL } from '../api.config';
+import { USER_API_URL } from '../api.config';
 
 export type Role = 'ADMIN' | 'TUTOR' | 'STUDENT' | 'CLUB_MANAGER' | 'EMPLOYEE';
 
@@ -28,7 +28,7 @@ export interface User {
 })
 export class UserService {
 
-  private readonly apiUrl = `${API_URL}/users`;
+  private readonly apiUrl = `${USER_API_URL}/users`;
 
   constructor(private http: HttpClient) {}
 

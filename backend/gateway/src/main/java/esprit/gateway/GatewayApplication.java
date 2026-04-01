@@ -19,6 +19,11 @@ public class GatewayApplication {
         return builder.routes()
                 .route("user", r -> r.path("/user/**")
                         .uri("lb://user"))
+                .route("evaluation", r -> r.path("/evaluation/**")
+                        .uri("lb://evaluation"))
+                // Serve uploaded files (photo, PDF) so frontend can display them
+                .route("evaluation-uploads", r -> r.path("/uploads/**")
+                        .uri("lb://evaluation"))
                 .build();
     }
 }

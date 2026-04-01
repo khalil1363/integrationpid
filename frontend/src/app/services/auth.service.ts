@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { API_URL } from '../api.config';
+import { USER_API_URL } from '../api.config';
 import type { Role } from './user.service';
 
 export interface AuthUser {
@@ -57,7 +57,7 @@ export interface FacebookSigninPayload {
 })
 export class AuthService {
 
-  private readonly apiUrl = `${API_URL}/auth`;
+  private readonly apiUrl = `${USER_API_URL}/auth`;
 
   // Simple in-memory current user (pas de localStorage pour éviter les erreurs SSR)
   private currentUserSubject = new BehaviorSubject<AuthUser | null>(null);

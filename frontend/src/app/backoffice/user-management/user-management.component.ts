@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { PageEvent } from '@angular/material/paginator';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,7 +36,8 @@ export class UserManagementComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   get isAdmin(): boolean {
@@ -61,7 +63,10 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadUsers();
+    // Avoid calling backend during SSR prerender/build.
+    if (isPlatformBrowser(this.platformId)) {
+      this.loadUsers();
+    }
   }
 
   loadUsers(): void {
