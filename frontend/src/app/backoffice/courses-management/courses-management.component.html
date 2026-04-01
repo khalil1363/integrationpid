@@ -1,0 +1,45 @@
+<div class="courses-management">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Course Management</h1>
+      <p class="header-subtitle">Manage all courses on the platform</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button class="action-btn primary" (click)="addCourse()">
+        <mat-icon>add_circle</mat-icon>
+        <span>Create Course</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Courses Grid -->
+  <div class="courses-grid">
+    <div class="course-card" *ngFor="let course of courses">
+      <div class="course-image">
+        <img [src]="course.image" [alt]="course.title">
+        <div class="course-actions">
+          <button mat-icon-button class="action-icon edit" (click)="editCourse(course)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button class="action-icon delete" (click)="deleteCourse(course)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+      <div class="course-content">
+        <h3>{{ course.title }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="courses.length === 0">
+    <mat-icon>school</mat-icon>
+    <h3>No courses found</h3>
+    <button mat-raised-button class="action-btn primary" (click)="addCourse()">
+      <mat-icon>add_circle</mat-icon>
+      Create Your First Course
+    </button>
+  </div>
+</div>

@@ -1,0 +1,157 @@
+<div class="user-management">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="header-title">
+        <mat-icon class="header-icon">groups</mat-icon>
+        <div>
+          <h1>User Management</h1>
+          <p class="header-subtitle">Manage all users, their roles, and permissions</p>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button
+        *ngIf="isAdmin"
+        mat-raised-button
+        class="action-btn primary"
+        (click)="addUser()">
+        <mat-icon>person_add</mat-icon>
+        <span>Add User</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="search-container">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        placeholder="Search users by name or email..." 
+        class="search-input"
+        [ngModel]="searchTerm"
+        (ngModelChange)="searchTerm = $event; onSearchInput()">
+    </div>
+    
+    <div class="filter-controls">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="selectedRole" (selectionChange)="onRoleChange()">
+          <mat-option value="all">All Roles</mat-option>
+          <mat-option value="ADMIN">Admin</mat-option>
+          <mat-option value="TUTOR">Tutor</mat-option>
+          <mat-option value="STUDENT">Student</mat-option>
+          <mat-option value="CLUB_MANAGER">Club manager</mat-option>
+          <mat-option value="EMPLOYEE">Employee</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Statut</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+          <mat-option value="all">Tous</mat-option>
+          <mat-option value="ACTIVE">Actif</mat-option>
+          <mat-option value="INACTIVE">Bloqué</mat-option>
+          <mat-option value="PENDING">En attente</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="status-legend">
+    <span class="legend-item">
+      <span class="dot active"></span> Actif
+    </span>
+    <span class="legend-item">
+      <span class="dot inactive"></span> Bloqué
+    </span>
+  </div>
+
+  <!-- Users Table -->
+  <div class="users-table-container">
+    <div class="table-header">
+      <span class="results-count">{{ isLoading ? 'Loading...' : ('Showing ' + filteredUsers.length + ' of ' + users.length + ' users') }}</span>
+    </div>
+    
+    <div class="users-table">
+      <div class="table-head">
+        <div class="th user-col">User</div>
+        <div class="th email-col">Email</div>
+        <div class="th role-col">Role</div>
+        <div class="th status-col">Status</div>
+        <div class="th date-col">Join Date</div>
+        <div class="th active-col">Last Active</div>
+        <div class="th actions-col">Actions</div>
+      </div>
+      
+      <div class="table-body">
+        <div class="table-row" *ngFor="let user of pagedUsers">
+          <div class="td user-col">
+            <div class="user-info">
+              <img [src]="user.avatar" [alt]="user.firstName" class="user-avatar">
+              <div class="user-name">
+                <span class="name">{{ user.firstName }} {{ user.lastName }}</span>
+                <span class="user-id">#{{ user.id }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="td email-col">{{ user.email }}</div>
+          <div class="td role-col">
+            <span [class]="getRoleClass(user.role)">{{ user.role }}</span>
+          </div>
+          <div class="td status-col">
+            <span [class]="getStatusClass(user.status)">{{ getStatusLabel(user.status) }}</span>
+          </div>
+          <div class="td date-col">{{ user.joinDate }}</div>
+          <div class="td active-col">{{ user.lastActive }}</div>
+          <div class="td actions-col">
+            <button mat-icon-button class="action-icon view" (click)="viewUser(user)" matTooltip="Voir">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button
+              *ngIf="isAdmin"
+              mat-icon-button
+              class="action-icon edit"
+              (click)="editUser(user)"
+              matTooltip="Modifier">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <ng-container *ngIf="canManageStatus(user)">
+              <button mat-icon-button class="action-icon block" (click)="blockUser(user)" *ngIf="(user.status ?? 'ACTIVE') !== 'INACTIVE'" matTooltip="Bloquer">
+                <mat-icon>block</mat-icon>
+              </button>
+              <button mat-icon-button class="action-icon unblock" (click)="unblockUser(user)" *ngIf="(user.status ?? 'ACTIVE') === 'INACTIVE'" matTooltip="Débloquer">
+                <mat-icon>lock_open</mat-icon>
+              </button>
+            </ng-container>
+            <button
+              *ngIf="isAdmin && user.role !== 'ADMIN'"
+              mat-icon-button
+              class="action-icon delete"
+              (click)="deleteUser(user)"
+              matTooltip="Supprimer">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && filteredUsers.length === 0">
+      <mat-icon>search_off</mat-icon>
+      <h3>No users found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator
+      [length]="filteredUsers.length"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>

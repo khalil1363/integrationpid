@@ -1,0 +1,281 @@
+<div class="dashboard-container">
+  <!-- Welcome Section -->
+  <div class="welcome-section">
+    <div class="welcome-card">
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <h1>Welcome back, Learner! 👋</h1>
+          <p>Continue your learning journey and achieve your goals</p>
+          <div class="welcome-stats">
+            <div class="stat-item">
+              <span class="stat-number">12</span>
+              <span class="stat-label">Courses</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">85%</span>
+              <span class="stat-label">Progress</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">24h</span>
+              <span class="stat-label">This Week</span>
+            </div>
+          </div>
+        </div>
+        <div class="welcome-icon">
+          <div class="icon-wrapper">
+            <mat-icon>school</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper blue">
+          <mat-icon class="stat-icon">book</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>12</h3>
+          <p>Active Courses</p>
+          <div class="stat-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: 75%"></div>
+            </div>
+            <span class="progress-text">75% complete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper green">
+          <mat-icon class="stat-icon">trending_up</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>85%</h3>
+          <p>Completion Rate</p>
+          <div class="stat-progress">
+            <div class="progress-bar">
+              <div class="progress-fill green" style="width: 85%"></div>
+            </div>
+            <span class="progress-text">+5% this month</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper purple">
+          <mat-icon class="stat-icon">emoji_events</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>8</h3>
+          <p>Achievements</p>
+          <div class="stat-progress">
+            <div class="progress-bar">
+              <div class="progress-fill purple" style="width: 60%"></div>
+            </div>
+            <span class="progress-text">2 new this week</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon-wrapper orange">
+          <mat-icon class="stat-icon">schedule</mat-icon>
+        </div>
+        <div class="stat-info">
+          <h3>24h</h3>
+          <p>Learning Time</p>
+          <div class="stat-progress">
+            <div class="progress-bar">
+              <div class="progress-fill orange" style="width: 40%"></div>
+            </div>
+            <span class="progress-text">Goal: 60h/week</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity and Quick Actions -->
+  <div class="content-grid">
+    <!-- Recent Activity -->
+    <div class="activity-section">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Recent Activity</h2>
+          <button mat-icon-button class="view-all-btn">
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="activity-icon completed">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">
+                <p>Completed: Introduction to Angular</p>
+                <span class="activity-time">2 hours ago</span>
+              </div>
+              <div class="activity-progress">
+                <div class="mini-progress">
+                  <div class="mini-progress-fill" style="width: 100%"></div>
+                </div>
+                <span>100%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="activity-item">
+            <div class="activity-icon started">
+              <mat-icon>play_circle</mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">
+                <p>Started: Advanced CSS Techniques</p>
+                <span class="activity-time">5 hours ago</span>
+              </div>
+              <div class="activity-progress">
+                <div class="mini-progress">
+                  <div class="mini-progress-fill" style="width: 25%"></div>
+                </div>
+                <span>25%</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="activity-item">
+            <div class="activity-icon achievement">
+              <mat-icon>star</mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">
+                <p>Earned Achievement: Fast Learner</p>
+                <span class="activity-time">1 day ago</span>
+              </div>
+              <div class="activity-progress">
+                <span class="achievement-badge">🏆</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-item">
+            <div class="activity-icon quiz">
+              <mat-icon>quiz</mat-icon>
+            </div>
+            <div class="activity-content">
+              <div class="activity-text">
+                <p>Quiz Score: 95% - JavaScript Fundamentals</p>
+                <span class="activity-time">2 days ago</span>
+              </div>
+              <div class="activity-progress">
+                <span class="score-badge">95%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="section-card">
+        <div class="section-header">
+          <h2>Quick Actions</h2>
+        </div>
+        <div class="actions-grid">
+          <button mat-raised-button class="action-btn primary">
+            <mat-icon>add</mat-icon>
+            <span>Browse Courses</span>
+          </button>
+          <button mat-raised-button class="action-btn accent">
+            <mat-icon>assessment</mat-icon>
+            <span>View Progress</span>
+          </button>
+          <button mat-raised-button class="action-btn warn">
+            <mat-icon>people</mat-icon>
+            <span>Study Groups</span>
+          </button>
+          <button mat-raised-button class="action-btn secondary">
+            <mat-icon>calendar_today</mat-icon>
+            <span>Schedule</span>
+          </button>
+          <button mat-raised-button class="action-btn secondary">
+            <mat-icon>chat</mat-icon>
+            <span>Messages</span>
+          </button>
+          <button mat-raised-button class="action-btn secondary">
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recommended Courses -->
+  <div class="recommended-section">
+    <div class="section-card">
+      <div class="section-header">
+        <h2>Recommended for You</h2>
+        <button mat-icon-button class="view-all-btn">
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+      <div class="courses-grid">
+        <div class="course-card">
+          <div class="course-image">
+            <img src="https://via.placeholder.com/300x150/667eea/ffffff?text=React" alt="Course">
+            <div class="course-badge">NEW</div>
+          </div>
+          <div class="course-content">
+            <h3>React Advanced Patterns</h3>
+            <p>Master advanced React concepts and patterns</p>
+            <div class="course-meta">
+              <span class="duration">8 weeks</span>
+              <span class="level">Advanced</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-image">
+            <img src="https://via.placeholder.com/300x150/4caf50/ffffff?text=Node.js" alt="Course">
+            <div class="course-badge popular">POPULAR</div>
+          </div>
+          <div class="course-content">
+            <h3>Node.js Backend Development</h3>
+            <p>Build scalable backend applications</p>
+            <div class="course-meta">
+              <span class="duration">10 weeks</span>
+              <span class="level">Intermediate</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-image">
+            <img src="https://via.placeholder.com/300x150/ff9800/ffffff?text=Python" alt="Course">
+          </div>
+          <div class="course-content">
+            <h3>Python for Data Science</h3>
+            <p>Learn Python for data analysis and ML</p>
+            <div class="course-meta">
+              <span class="duration">12 weeks</span>
+              <span class="level">Beginner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

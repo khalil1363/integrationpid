@@ -1,0 +1,153 @@
+<div class="clubs-management">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1>Club Management</h1>
+      <p class="header-subtitle">Create and manage student clubs and communities</p>
+    </div>
+    <div class="header-actions">
+      <button mat-raised-button class="action-btn primary" (click)="addClub()">
+        <mat-icon>group_add</mat-icon>
+        <span>Create Club</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-row">
+    <div class="mini-stat-card">
+      <div class="mini-stat-icon purple">
+        <mat-icon>groups</mat-icon>
+      </div>
+      <div class="mini-stat-info">
+        <span class="mini-stat-value">{{ clubs.length }}</span>
+        <span class="mini-stat-label">Total Clubs</span>
+      </div>
+    </div>
+    <div class="mini-stat-card">
+      <div class="mini-stat-icon green">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="mini-stat-info">
+        <span class="mini-stat-value">{{ activeCount }}</span>
+        <span class="mini-stat-label">Active</span>
+      </div>
+    </div>
+    <div class="mini-stat-card">
+      <div class="mini-stat-icon orange">
+        <mat-icon>pending</mat-icon>
+      </div>
+      <div class="mini-stat-info">
+        <span class="mini-stat-value">{{ pendingCount }}</span>
+        <span class="mini-stat-label">Pending</span>
+      </div>
+    </div>
+    <div class="mini-stat-card">
+      <div class="mini-stat-icon blue">
+        <mat-icon>people</mat-icon>
+      </div>
+      <div class="mini-stat-info">
+        <span class="mini-stat-value">{{ totalMembers | number }}</span>
+        <span class="mini-stat-label">Total Members</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="search-container">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input 
+        type="text" 
+        placeholder="Search clubs by name or leader..." 
+        class="search-input"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()">
+    </div>
+    
+    <div class="filter-controls">
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (selectionChange)="onCategoryChange()">
+          <mat-option value="all">All Categories</mat-option>
+          <mat-option value="Technology">Technology</mat-option>
+          <mat-option value="Design">Design</mat-option>
+          <mat-option value="Security">Security</mat-option>
+          <mat-option value="Gaming">Gaming</mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+          <mat-option value="all">All Status</mat-option>
+          <mat-option value="active">Active</mat-option>
+          <mat-option value="inactive">Inactive</mat-option>
+          <mat-option value="pending">Pending</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <!-- Clubs Grid -->
+  <div class="clubs-grid">
+    <div class="club-card" *ngFor="let club of filteredClubs">
+      <div class="club-header">
+        <div class="club-avatar">
+          <img [src]="club.image" [alt]="club.name">
+        </div>
+        <span [class]="getStatusClass(club.status)">{{ club.status }}</span>
+      </div>
+      <div class="club-content">
+        <h3>{{ club.name }}</h3>
+        <p class="club-description">{{ club.description }}</p>
+        
+        <div class="club-meta">
+          <div class="meta-item">
+            <mat-icon>category</mat-icon>
+            <span>{{ club.category }}</span>
+          </div>
+          <div class="meta-item">
+            <mat-icon>person</mat-icon>
+            <span>{{ club.leader }}</span>
+          </div>
+        </div>
+        
+        <div class="club-stats">
+          <div class="stat">
+            <span class="stat-value">{{ club.members }}</span>
+            <span class="stat-label">Members</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ club.createdAt | date:'MMM yyyy' }}</span>
+            <span class="stat-label">Created</span>
+          </div>
+        </div>
+        
+        <div class="club-actions">
+          <button mat-button class="view-btn" (click)="viewClub(club)">
+            <mat-icon>visibility</mat-icon>
+            View
+          </button>
+          <button mat-icon-button class="action-icon edit" (click)="editClub(club)" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button class="action-icon delete" (click)="deleteClub(club)" matTooltip="Delete">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="filteredClubs.length === 0">
+    <mat-icon>groups</mat-icon>
+    <h3>No clubs found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+    <button mat-raised-button class="action-btn primary" (click)="addClub()">
+      <mat-icon>group_add</mat-icon>
+      Create Your First Club
+    </button>
+  </div>
+</div>

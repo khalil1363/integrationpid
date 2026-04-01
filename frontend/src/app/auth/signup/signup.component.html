@@ -1,0 +1,190 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo">
+        <div class="logo-circle">
+          <mat-icon>school</mat-icon>
+        </div>
+        <div class="logo-text">
+          <h1>Join Slang English</h1>
+          <p class="brand-subtitle">Create your account and start learning today.</p>
+        </div>
+      </div>
+      <p class="subtitle">Fill in your information below to get started.</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="onSignUp()">
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>First Name</mat-label>
+          <input 
+            matInput 
+            [(ngModel)]="signUpData.firstName" 
+            name="firstName"
+            autocomplete="given-name"
+            required>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Last Name</mat-label>
+          <input 
+            matInput 
+            [(ngModel)]="signUpData.lastName" 
+            name="lastName"
+            autocomplete="family-name"
+            required>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Email Address</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="signUpData.email" 
+          name="email" 
+          type="email"
+          (blur)="onEmailBlur()"
+          autocomplete="email"
+          required>
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+      <p 
+        *ngIf="emailTouched && !isValidEmail(signUpData.email)" 
+        class="field-error">
+        Veuillez saisir une adresse email valide (ex : nom.prenom&#64;gmail.com).
+      </p>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Phone Number</mat-label>
+        <input
+          matInput
+          [(ngModel)]="signUpData.phone"
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          required>
+        <mat-icon matSuffix>phone</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Address</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="signUpData.address"
+          name="address"
+          rows="2"
+          autocomplete="street-address"></textarea>
+        <mat-icon matSuffix>location_on</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Password</mat-label>
+        <input 
+          matInput 
+        [(ngModel)]="signUpData.password" 
+          name="password" 
+        (ngModelChange)="onPasswordInput($event)"
+          [type]="hidePassword ? 'password' : 'text'"
+          placeholder="Min. 8 caractères, lettres et chiffres"
+          required>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          (click)="hidePassword = !hidePassword"
+          type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <div *ngIf="passwordStrengthLabel" class="password-strength">
+        <span [ngClass]="{
+          'weak': passwordStrengthLevel === 'weak',
+          'medium': passwordStrengthLevel === 'medium',
+          'strong': passwordStrengthLevel === 'strong'
+        }">
+          {{ passwordStrengthLabel }}
+        </span>
+      </div>
+      <p class="password-hint">Le mot de passe doit contenir au moins 8 caractères, des lettres et des chiffres.</p>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Confirm Password</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="signUpData.confirmPassword" 
+          name="confirmPassword" 
+          [type]="hideConfirmPassword ? 'password' : 'text'"
+          placeholder="Confirm your password"
+          required>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          (click)="hideConfirmPassword = !hideConfirmPassword"
+          type="button">
+          <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="avatar-section">
+        <div class="avatar-preview-wrap">
+          <div class="avatar-preview">
+            <img [src]="avatarPreview || 'https://via.placeholder.com/100x100/667eea/ffffff?text=Photo'" alt="Photo">
+          </div>
+          <p class="avatar-label">Photo de profil (optionnel)</p>
+        </div>
+        <div class="avatar-options">
+          <label for="avatar-upload" class="option-btn file-btn">
+            <mat-icon>folder_open</mat-icon>
+            <span>Depuis mon PC</span>
+          </label>
+          <input id="avatar-upload" type="file" accept="image/*" (change)="onAvatarChange($event)" hidden>
+          <button type="button" class="option-btn camera-btn" (click)="openCamera()">
+            <mat-icon>camera_alt</mat-icon>
+            <span>Prendre une photo</span>
+          </button>
+        </div>
+        <p *ngIf="cameraError" class="camera-error">{{ cameraError }}</p>
+        <p class="camera-hint">La caméra fonctionne sur <strong>localhost</strong> ou en <strong>HTTPS</strong>. Sinon, utilisez « Depuis mon PC ».</p>
+        <div *ngIf="showCamera" class="camera-panel">
+          <video #videoEl autoplay playsinline muted class="camera-video"></video>
+          <canvas #canvasEl class="camera-canvas" hidden></canvas>
+          <div class="camera-actions">
+            <button type="button" mat-raised-button color="primary" (click)="capturePhoto()">
+              <mat-icon>camera</mat-icon>
+              Capturer
+            </button>
+            <button type="button" mat-stroked-button (click)="closeCamera()">Annuler</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="recaptcha-wrap">
+        <div id="recaptcha-signup" class="recaptcha-container"></div>
+        <p class="recaptcha-hint">Vérifiez que vous n'êtes pas un robot.</p>
+      </div>
+
+      <div class="form-options">
+        <mat-checkbox [(ngModel)]="agreeToTerms" name="agreeToTerms" required>
+          J'accepte les
+          <a routerLink="/auth/terms-of-service" class="terms-link" target="_blank">Conditions d'utilisation</a>
+          et la
+          <a routerLink="/auth/privacy-policy" class="terms-link" target="_blank">Politique de confidentialité</a>
+        </mat-checkbox>
+      </div>
+
+      <p *ngIf="signupError" class="signup-error">{{ signupError }}</p>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="submit-btn"
+        type="submit"
+        [disabled]="!isFormValid() || isSubmitting">
+        <mat-icon>person_add</mat-icon>
+        {{ isSubmitting ? 'Création...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/auth/signin">Sign in</a></p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+.frontoffice-layout {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Welcome overlay (étudiant après signin) */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(8px);
+  animation: welcomeOverlayIn 0.6s ease-out forwards;
+  cursor: pointer;
+}
+
+.welcome-overlay--out {
+  animation: welcomeOverlayOut 0.45s ease-in forwards;
+}
+
+.welcome-overlay-card {
+  text-align: center;
+  padding: 48px 64px;
+  background: linear-gradient(145deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  box-shadow: 0 24px 48px rgba(102, 126, 234, 0.4);
+  cursor: default;
+  animation: welcomeCardIn 0.8s ease-out 0.2s both;
+}
+
+.welcome-overlay--out .welcome-overlay-card {
+  animation: welcomeCardOut 0.4s ease-in forwards;
+}
+
+.welcome-overlay-title {
+  margin: 0 0 16px 0;
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.welcome-overlay-slogan {
+  margin: 0 0 24px 0;
+  font-size: 1.35rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.welcome-overlay-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes welcomeOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes welcomeOverlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes welcomeCardIn {
+  from { opacity: 0; transform: scale(0.85) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes welcomeCardOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+.main-content {
+  margin-left: 250px;
+  padding-top: 64px;
+  min-height: calc(100vh - 64px);
+  transition: margin-left 0.3s ease;
+  background: #fafbfc;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 70px;
+}
+
+.content-wrapper {
+  padding: 32px;
+  min-height: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content-wrapper {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+  }
+  
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+  
+  .content-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding: 12px;
+  }
+}

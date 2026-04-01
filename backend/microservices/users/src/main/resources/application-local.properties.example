@@ -1,0 +1,6 @@
+# Copiez ce fichier en "application-local.properties" (sans .example)
+# et remplissez avec votre Gmail et mot de passe d'application.
+# Le fichier application-local.properties n'est pas versionné (sécurité).
+
+spring.mail.username=lamisbenhassine@esprit.tn
+spring.mail.password=kpmf zmho cnkq dazg

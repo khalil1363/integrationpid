@@ -1,0 +1,21 @@
+<div class="courses-container">
+  <!-- Header Section -->
+  <div class="courses-header">
+    <div class="header-content">
+      <h1>My Courses</h1>
+      <p class="header-subtitle">Continue your learning journey</p>
+    </div>
+  </div>
+
+  <!-- Courses Grid -->
+  <div class="courses-grid">
+    <div class="course-card" *ngFor="let course of courses" (click)="viewDetails(course)">
+      <div class="course-image">
+        <img [src]="course.image" [alt]="course.title">
+      </div>
+      <div class="course-content">
+        <h3>{{ course.title }}</h3>
+      </div>
+    </div>
+  </div>
+</div>

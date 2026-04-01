@@ -1,0 +1,85 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo">
+        <div class="logo-circle">
+          <mat-icon>school</mat-icon>
+        </div>
+        <div class="logo-text">
+          <h1>Slang English</h1>
+          <p class="brand-subtitle">Improve your English every day</p>
+        </div>
+      </div>
+      <p class="subtitle">Welcome back! Please sign in to continue.</p>
+    </div>
+
+    <form class="auth-form" (ngSubmit)="onSignIn()">
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Email Address</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="signInData.email" 
+          name="email" 
+          type="email"
+          placeholder="Enter your email"
+          required>
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field full-width">
+        <mat-label>Password</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="signInData.password" 
+          name="password" 
+          [type]="hidePassword ? 'password' : 'text'"
+          placeholder="Enter your password"
+          required>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          (click)="hidePassword = !hidePassword"
+          type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+      <p class="password-hint">Le mot de passe doit contenir au moins 8 caractères, des lettres et des chiffres.</p>
+
+      <div class="form-options">
+        <mat-checkbox [(ngModel)]="rememberMe" name="rememberMe">
+          Remember me
+        </mat-checkbox>
+        <a routerLink="/auth/forgot-password" class="forgot-password">Forgot password?</a>
+      </div>
+
+      <p *ngIf="signinError" class="signup-error">{{ signinError }}</p>
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="submit-btn"
+        type="submit"
+        [disabled]="!isFormValid() || isSubmitting">
+        <mat-icon>login</mat-icon>
+        {{ isSubmitting ? 'Connexion...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="auth-divider">
+      <span>OR</span>
+    </div>
+
+    <div class="social-login">
+      <div id="google-signin-button" class="social-btn google-btn"></div>
+      <button mat-stroked-button class="social-btn facebook-btn" type="button" (click)="onFacebookSignIn()">
+        <mat-icon>facebook</mat-icon>
+        Sign in with Facebook
+      </button>
+    </div>
+
+    <p *ngIf="oauthError" class="signup-error">{{ oauthError }}</p>
+
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/auth/signup">Sign up</a></p>
+    </div>
+  </div>
+</div>

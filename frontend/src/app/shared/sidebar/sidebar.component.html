@@ -1,0 +1,46 @@
+<div class="sidebar-container" [@slideInOut]="isCollapsed ? 'closed' : 'open'">
+  <div class="sidebar" [class]="'sidebar ' + theme">
+    <!-- Sidebar Header -->
+    <div class="sidebar-header">
+      <button 
+        mat-icon-button 
+        (click)="onToggleCollapse()"
+        class="collapse-toggle"
+        [matTooltip]="isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'">
+        <mat-icon>{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
+      </button>
+      
+      <div class="sidebar-logo" [@fadeInOut]="isCollapsed ? 'hidden' : 'visible'">
+        <mat-icon>dashboard</mat-icon>
+        <span class="logo-text">Menu</span>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="sidebar-menu">
+      <div 
+        *ngFor="let item of menuItems" 
+        class="menu-item"
+        [class.active]="isMenuItemActive(item)"
+        [matTooltip]="isCollapsed ? item.label : ''"
+        matTooltipPosition="right"
+        (click)="onMenuItemClick(item)">
+        
+        <mat-icon class="menu-icon">{{ item.icon }}</mat-icon>
+        <span class="menu-label" [@fadeInOut]="isCollapsed ? 'hidden' : 'visible'">
+          {{ item.label }}
+        </span>
+        
+        <div class="active-indicator" *ngIf="isMenuItemActive(item)"></div>
+      </div>
+    </div>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="footer-item" [@fadeInOut]="isCollapsed ? 'hidden' : 'visible'">
+        <mat-icon>info</mat-icon>
+        <span class="footer-text">Version 1.0</span>
+      </div>
+    </div>
+  </div>
+</div>

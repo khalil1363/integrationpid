@@ -1,0 +1,40 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h1>Chat Room</h1>
+    <div class="chat-status">
+      <span class="status-indicator online"></span>
+      <span>Online</span>
+    </div>
+  </div>
+
+  <div class="chat-content">
+    <div class="messages-container">
+      <div class="message" *ngFor="let message of messages" [class.own-message]="message.isOwn">
+        <div class="message-avatar">
+          <img [src]="message.avatar" [alt]="message.sender">
+        </div>
+        <div class="message-content">
+          <div class="message-header">
+            <span class="sender-name">{{ message.sender }}</span>
+            <span class="message-time">{{ message.time }}</span>
+          </div>
+          <div class="message-text">{{ message.text }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="message-input-container">
+      <form class="message-form" (submit)="sendMessage()">
+        <mat-form-field appearance="outline" class="message-input">
+          <mat-label>Type your message...</mat-label>
+          <input matInput [(ngModel)]="newMessage" name="message">
+          <mat-icon matSuffix>send</mat-icon>
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!newMessage.trim()">
+          <mat-icon>send</mat-icon>
+          Send
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

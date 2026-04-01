@@ -1,0 +1,88 @@
+<div class="profile-container" *ngIf="user as user">
+  <div class="profile-header">
+    <div class="title-wrap">
+      <mat-icon class="title-icon">person</mat-icon>
+      <div>
+        <h1>Admin Profile</h1>
+        <p class="subtitle">View and update your administrator information.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-content">
+    <div class="profile-card">
+      <div class="user-info-card">
+        <div class="user-avatar">
+          <img [src]="getAvatarSrc(user) || 'https://via.placeholder.com/140x140/4caf50/ffffff?text=' + (user.firstName.charAt(0) || '') + (user.lastName.charAt(0) || '')"
+               [alt]="user.firstName + ' ' + user.lastName">
+        </div>
+        <div class="user-details">
+          <h2>{{ user.firstName }} {{ user.lastName }}</h2>
+          <p class="email">{{ user.email }}</p>
+          <span class="role">{{ user.role }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-form">
+      <mat-card>
+        <mat-card-content>
+          <h3>Edit Profile Information</h3>
+          <p class="status-message success" *ngIf="saveSuccess">Profil mis à jour avec succès.</p>
+          <p class="status-message error" *ngIf="saveError">{{ saveError }}</p>
+          <form class="profile-form-content">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>First Name</mat-label>
+                <input matInput [(ngModel)]="user.firstName" name="firstName">
+                <mat-icon matSuffix>person</mat-icon>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Last Name</mat-label>
+                <input matInput [(ngModel)]="user.lastName" name="lastName">
+                <mat-icon matSuffix>person</mat-icon>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Email</mat-label>
+              <input matInput [(ngModel)]="user.email" name="email" type="email">
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Phone</mat-label>
+              <input matInput [(ngModel)]="user.phone" name="phone">
+              <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Address</mat-label>
+              <textarea matInput [(ngModel)]="user.address" name="address" rows="3"></textarea>
+              <mat-icon matSuffix>location_on</mat-icon>
+            </mat-form-field>
+
+            <div class="form-actions">
+              <button mat-raised-button color="primary" (click)="saveProfile()" [disabled]="isSaving">
+                <mat-icon>save</mat-icon>
+                {{ isSaving ? 'Saving...' : 'Save Changes' }}
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="profile-container" *ngIf="!user">
+  <div class="profile-header">
+    <h1>Admin Profile</h1>
+  </div>
+  <mat-card>
+    <mat-card-content>
+      <p>Please sign in to view your profile.</p>
+    </mat-card-content>
+  </mat-card>
+</div>
+

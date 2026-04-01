@@ -1,0 +1,27 @@
+<div class="backoffice-layout">
+  <!-- Navbar -->
+  <app-navbar 
+    theme="dark"
+    [username]="username"
+    [userAvatar]="userAvatar"
+    [showSidebarToggle]="true"
+    (sidebarToggle)="toggleSidebar()"
+    (logout)="onLogout()">
+  </app-navbar>
+
+  <!-- Sidebar -->
+  <app-sidebar 
+    theme="dark"
+    [menuItems]="backofficeMenuItems"
+    [isCollapsed]="isSidebarCollapsed"
+    (toggleCollapse)="toggleSidebar()"
+    (menuItemClick)="onMenuItemClick($event)">
+  </app-sidebar>
+
+  <!-- Main Content -->
+  <div class="main-content" [class.sidebar-collapsed]="isSidebarCollapsed">
+    <div class="content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
