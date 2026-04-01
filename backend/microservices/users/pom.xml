@@ -42,6 +42,12 @@
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 
+		<!-- Config Client (reads config from config-server via spring.config.import) -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+
 		<!-- Spring Web (RestController, etc.) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
