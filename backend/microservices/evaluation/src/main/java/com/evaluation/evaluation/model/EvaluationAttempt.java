@@ -18,6 +18,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
+import com.evaluation.evaluation.dto.UserSummaryDto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,4 +77,12 @@ public class EvaluationAttempt {
 
     @OneToMany(mappedBy = "evaluationAttempt", cascade = CascadeType.ALL)
     private List<StudentAnswer> studentAnswers = new ArrayList<>();
+
+    /**
+     * Enriched user info from User microservice (OpenFeign). Not stored in DB.
+     * This is used by the backoffice to display real student name/email for attempts.
+     */
+    @Transient
+    @com.fasterxml.jackson.annotation.JsonProperty("user")
+    private UserSummaryDto user;
 }

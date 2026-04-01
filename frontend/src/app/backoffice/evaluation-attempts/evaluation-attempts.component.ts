@@ -71,6 +71,12 @@ export class EvaluationAttemptsComponent implements OnInit {
     return u ? `${u.name} ${u.surname}` : `User #${userId}`;
   }
 
+  userNameFromAttempt(a: EvaluationAttempt): string {
+    const u = a.user;
+    if (u) return `${u.name} ${u.surname}`;
+    return this.userName(a.userId);
+  }
+
   viewAttempt(a: EvaluationAttempt): void {
     if (a.studentAnswers && a.studentAnswers.length > 0) {
       this.selectedAttempt = a;

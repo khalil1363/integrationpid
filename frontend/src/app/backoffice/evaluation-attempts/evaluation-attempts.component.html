@@ -13,7 +13,7 @@
     <div class="attempt-card" *ngFor="let a of attempts" (click)="viewAttempt(a)">
       <div class="attempt-user">
         <mat-icon>person</mat-icon>
-        <span>{{ userName(a.userId) }}</span>
+        <span>{{ userNameFromAttempt(a) }}</span>
       </div>
       <div class="attempt-meta">
         <span>Attempt #{{ a.attemptNumber }}</span>
@@ -39,7 +39,7 @@
   <div class="detail-overlay" *ngIf="selectedAttempt" (click)="closeAttempt()">
     <div class="detail-panel" (click)="$event.stopPropagation()">
       <div class="detail-header">
-        <h2>{{ userName(selectedAttempt.userId) }} – Attempt #{{ selectedAttempt.attemptNumber }}</h2>
+        <h2>{{ userNameFromAttempt(selectedAttempt) }} – Attempt #{{ selectedAttempt.attemptNumber }}</h2>
         <button mat-icon-button (click)="closeAttempt()"><mat-icon>close</mat-icon></button>
       </div>
       <div class="detail-score">

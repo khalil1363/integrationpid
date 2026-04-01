@@ -16,6 +16,9 @@ import com.evaluation.evaluation.repository.StudentAnswerRepository;
 import com.evaluation.evaluation.service.EvaluationAttemptService;
 import com.evaluation.evaluation.service.AiGradingService;
 import com.evaluation.evaluation.dto.CertificateEligibilityResponse;
+import com.evaluation.evaluation.dto.UserMicroDto;
+import com.evaluation.evaluation.dto.UserSummaryDto;
+import com.evaluation.evaluation.client.UserClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,37 @@ public class EvaluationAttemptServiceImpl implements EvaluationAttemptService {
     private final FillBlankQuestionRepository fillBlankQuestionRepository;
     private final AiGradingService aiGradingService;
     private final ReadingQuestionRepository readingQuestionRepository;
+    private final UserClient userClient;
+
+    private UserSummaryDto toUserSummary(UserMicroDto u) {
+        if (u == null) return null;
+        return new UserSummaryDto(
+                u.getId(),
+                u.getFirstName(),
+                u.getLastName(),
+                u.getEmail(),
+                u.getRole()
+        );
+    }
+
+    private void enrichAttemptUser(EvaluationAttempt attempt, java.util.Map<Long, UserSummaryDto> cache) {
+        if (attempt == null || attempt.getUserId() == null) return;
+        Long userId = attempt.getUserId();
+        UserSummaryDto cached = cache.get(userId);
+        if (cached != null) {
+            attempt.setUser(cached);
+            return;
+        }
+        try {
+            UserMicroDto remote = userClient.getUserById(userId);
+            UserSummaryDto summary = toUserSummary(remote);
+            if (summary != null) cache.put(userId, summary);
+            attempt.setUser(summary);
+        } catch (Exception e) {
+            // If user service is down, keep attempt usable; UI can still fallback to "User #id".
+            attempt.setUser(null);
+        }
+    }
 
     @Override
     public EvaluationAttempt startAttempt(Long evaluationId, Long userId) {
@@ -276,19 +310,26 @@ public class EvaluationAttemptServiceImpl implements EvaluationAttemptService {
         if (attempt.getEvaluation() != null && attempt.getEvaluation().getTotalScore() != null) {
             attempt.setMaxScore(attempt.getEvaluation().getTotalScore());
         }
+        enrichAttemptUser(attempt, new java.util.HashMap<>());
         return attempt;
     }
 
     @Override
     public List<EvaluationAttempt> getAttemptsByUserAndEvaluation(Long userId, Long evaluationId) {
-        return evaluationAttemptRepository.findByUserIdAndEvaluationId(userId, evaluationId);
+        List<EvaluationAttempt> list = evaluationAttemptRepository.findByUserIdAndEvaluationId(userId, evaluationId);
+        java.util.Map<Long, UserSummaryDto> cache = new java.util.HashMap<>();
+        for (EvaluationAttempt a : list) enrichAttemptUser(a, cache);
+        return list;
     }
 
     @Override
     public List<EvaluationAttempt> getAttemptsByEvaluation(Long evaluationId) {
         Evaluation evaluation = evaluationRepository.findById(evaluationId)
                 .orElseThrow(() -> new ResourceNotFoundException("Evaluation not found with id: " + evaluationId));
-        return evaluationAttemptRepository.findByEvaluationId(evaluationId);
+        List<EvaluationAttempt> list = evaluationAttemptRepository.findByEvaluationId(evaluationId);
+        java.util.Map<Long, UserSummaryDto> cache = new java.util.HashMap<>();
+        for (EvaluationAttempt a : list) enrichAttemptUser(a, cache);
+        return list;
     }
 
     @Override

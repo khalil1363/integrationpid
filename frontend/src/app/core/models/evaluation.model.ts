@@ -44,6 +44,8 @@ export interface Blank {
 export interface EvaluationAttempt {
   id: number;
   userId: number;
+  /** Optional enriched user info from backend (OpenFeign). */
+  user?: User;
   startTime: string;
   endTime?: string;
   score?: number;
