@@ -1,0 +1,18 @@
+<div class="verify-page">
+  <div class="verify-card">
+    <div class="verify-logo">{{ platformName }}</div>
+    <p class="verify-intro">We are <strong>SlangEnglish</strong>.</p>
+    <p class="verify-statement">
+      We certify that <strong>{{ studentName }}</strong> passed the evaluation successfully.
+    </p>
+    <p class="verify-level" *ngIf="level">Level achieved: <strong>{{ level }}</strong></p>
+    <p class="verify-date">{{ certificateDate }}</p>
+    <div class="signature-block">
+      <div class="signature-line"></div>
+      <p class="signature-label">SlangEnglish Director</p>
+    </div>
+    <div class="verify-seal">
+      <span class="seal-text">{{ platformName }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="take-evaluation">
+  <p class="tab-warning" *ngIf="attempt && !loading">
+    <mat-icon>warning</mat-icon>
+    Do not switch tabs or leave this page — your attempt will be submitted with 0.
+  </p>
+  <div class="eval-header" *ngIf="evaluation">
+    <h1>{{ evaluation.title }}</h1>
+    <div class="header-meta">
+      <p class="subtitle">Question {{ currentIndex + 1 }} of {{ questions.length }}</p>
+      <p class="timer" *ngIf="timeRemainingSeconds !== null" [class.timer-low]="timeRemainingSeconds <= 300">
+        <mat-icon>schedule</mat-icon>
+        {{ timeRemainingDisplay }}
+      </p>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="progress" class="progress-bar"></mat-progress-bar>
+  </div>
+
+  <div class="question-card" *ngIf="currentQuestion && !loading">
+    <div class="q-header">
+      <span class="q-type">{{ currentQuestion.questionType }}</span>
+      <span class="q-points">{{ currentQuestion.points }} pts</span>
+    </div>
+    <p class="q-text">{{ currentQuestion.questionText }}</p>
+
+    <!-- MCQ -->
+    <div class="options-list" *ngIf="currentQuestion.questionType === 'MCQ' && currentQuestion.options">
+      <button mat-stroked-button class="option-btn" *ngFor="let opt of currentQuestion.options"
+        [class.selected]="isSelectedMCQ(opt)" (click)="selectOptionMCQ(opt)">
+        <mat-icon>{{ isSelectedMCQ(opt) ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+        {{ opt.optionText }}
+      </button>
+    </div>
+
+    <!-- MSQ -->
+    <div class="options-list" *ngIf="currentQuestion.questionType === 'MSQ' && currentQuestion.options">
+      <button mat-stroked-button class="option-btn" *ngFor="let opt of currentQuestion.options"
+        [class.selected]="isSelectedMSQ(opt)" (click)="toggleOptionMSQ(opt)">
+        <mat-icon>{{ isSelectedMSQ(opt) ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+        {{ opt.optionText }}
+      </button>
+    </div>
+
+    <!-- FILL_BLANK: word bank at top, paragraph with blanks for drag & drop -->
+    <div class="fill-blank-container" *ngIf="currentQuestion.questionType === 'FILL_BLANK'">
+      <p class="fill-blank-instruction">Drag each word from the box below into the correct blank in the paragraph.</p>
+      <div class="fill-blank-word-bank">
+        <span class="word-bank-label">Words:</span>
+        <span class="fill-blank-word" *ngFor="let word of getFillBlankBank()" draggable="true"
+          (dragstart)="onFillBlankDragStart(word, $event)">{{ word }}</span>
+      </div>
+      <div class="fill-blank-paragraph">
+        <ng-container *ngFor="let segment of getFillBlankSegments(); let i = index">
+          <span class="segment-text">{{ segment }}</span>
+          <span class="fill-blank-slot" *ngIf="i < getFillBlankSegments().length - 1"
+            (dragover)="onFillBlankDragOver($event)"
+            (drop)="onFillBlankDrop(i, $event)"
+            [class.filled]="getFillBlankSlots()[i]">
+            <span class="slot-word" *ngIf="getFillBlankSlots()[i]">
+              {{ getFillBlankSlots()[i] }}
+              <button type="button" class="slot-remove" mat-icon-button (click)="removeFillBlankFromSlot(i)">
+                <mat-icon>close</mat-icon>
+              </button>
+            </span>
+            <span class="slot-placeholder" *ngIf="!getFillBlankSlots()[i]">_____</span>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- READING: show instructions, PDF viewer, then answer -->
+    <div class="reading-container" *ngIf="currentQuestion.questionType === 'READING'">
+      <p class="reading-instruction" *ngIf="currentQuestion.instructions">{{ currentQuestion.instructions }}</p>
+      <div class="reading-pdf-viewer" *ngIf="currentQuestion.pdfUrl">
+        <p class="pdf-label">Read the document below, then answer the question.</p>
+        <iframe [src]="safePdfUrlForCurrentQuestion" class="pdf-iframe" title="Reading PDF"></iframe>
+        <a [href]="getPdfDisplayUrl(currentQuestion.pdfUrl)" target="_blank" rel="noopener" class="pdf-open-link">
+          <mat-icon>open_in_new</mat-icon> Open PDF in new tab
+        </a>
+      </div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your answer</mat-label>
+        <textarea matInput rows="6" [ngModel]="getAnswerText()" (ngModelChange)="setAnswerText($event)" placeholder="Type your answer here..."></textarea>
+      </mat-form-field>
+    </div>
+
+    <!-- WRITING -->
+    <div class="text-answer" *ngIf="currentQuestion.questionType === 'WRITING'">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Your answer</mat-label>
+        <textarea matInput rows="6" [ngModel]="getAnswerText()" (ngModelChange)="setAnswerText($event)" placeholder="Type your answer here..."></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button (click)="prev()" [disabled]="currentIndex === 0">
+        <mat-icon>arrow_back</mat-icon> Previous
+      </button>
+      <button mat-raised-button class="submit-btn" (click)="submitCurrent()" [disabled]="submitting || finishing">
+        <mat-icon>{{ currentIndex < questions.length - 1 ? 'arrow_forward' : 'check_circle' }}</mat-icon>
+        {{ currentIndex < questions.length - 1 ? 'Next' : 'Finish & Submit' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading...</p>
+  </div>
+</div>

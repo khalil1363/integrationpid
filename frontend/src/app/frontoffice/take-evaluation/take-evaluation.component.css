@@ -1,0 +1,380 @@
+/* ===== E-LEARNING STYLE: Take Evaluation (Frontoffice) ===== */
+
+.take-evaluation {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+  animation: fadeInUp 0.4s ease-out;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.take-evaluation textarea,
+.take-evaluation input {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.tab-warning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  margin: 0 0 24px 0;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #f59e0b;
+  border-radius: 14px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #b45309;
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.1);
+}
+
+.tab-warning mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eval-header {
+  margin-bottom: 28px;
+  padding: 28px 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.eval-header h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.02em;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.timer mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+}
+
+.timer-low {
+  color: #dc2626;
+}
+
+.progress-bar {
+  height: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.question-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px 36px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.q-type {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.q-points {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.q-text {
+  font-size: 1.0625rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0 0 28px 0;
+}
+
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.option-btn {
+  text-align: left;
+  padding: 16px 20px;
+  border-radius: 14px;
+  text-transform: none;
+  font-size: 0.9375rem;
+  justify-content: flex-start;
+  border: 2px solid #e2e8f0;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.option-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.option-btn mat-icon {
+  margin-right: 14px;
+  color: #94a3b8;
+}
+
+.option-btn.selected {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(139, 92, 246, 0.06) 100%);
+  color: #4f46e5;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.option-btn.selected mat-icon {
+  color: #6366f1;
+}
+
+.text-answer {
+  margin-bottom: 28px;
+}
+
+.reading-container {
+  margin-bottom: 28px;
+}
+
+.reading-instruction {
+  font-size: 0.875rem;
+  color: #475569;
+  margin: 0 0 14px 0;
+  line-height: 1.5;
+}
+
+.reading-pdf-viewer {
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.reading-pdf-viewer .pdf-label {
+  font-size: 0.8125rem;
+  color: #64748b;
+  margin: 0;
+  padding: 14px 20px;
+  background: rgba(99, 102, 241, 0.06);
+  border-bottom: 1px solid #e2e8f0;
+  font-weight: 500;
+}
+
+.pdf-iframe {
+  display: block;
+  width: 100%;
+  height: 480px;
+  border: none;
+}
+
+.pdf-open-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8125rem;
+  color: #6366f1;
+  padding: 12px 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pdf-open-link:hover {
+  text-decoration: underline;
+}
+
+.fill-blank-container {
+  margin-bottom: 28px;
+}
+
+.fill-blank-instruction {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 14px 0;
+}
+
+.fill-blank-word-bank {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.06) 0%, rgba(139, 92, 246, 0.04) 100%);
+  border: 2px dashed #6366f1;
+  border-radius: 14px;
+  margin-bottom: 24px;
+}
+
+.word-bank-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #6366f1;
+  margin-right: 4px;
+}
+
+.fill-blank-word {
+  display: inline-block;
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #6366f1;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: #334155;
+  cursor: grab;
+  user-select: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  font-weight: 500;
+}
+
+.fill-blank-word:active {
+  cursor: grabbing;
+}
+
+.fill-blank-paragraph {
+  font-size: 1rem;
+  line-height: 2;
+  color: #334155;
+}
+
+.fill-blank-slot {
+  display: inline-block;
+  min-width: 120px;
+  min-height: 40px;
+  vertical-align: middle;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  margin: 0 6px;
+  padding: 6px 10px;
+  background: #f8fafc;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.fill-blank-slot:hover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.fill-blank-slot.filled {
+  border-style: solid;
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.slot-placeholder {
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.slot-word {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.slot-remove {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+  color: #64748b;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  text-transform: none;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 10px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.submit-btn mat-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: #64748b;
+}
+
+.loading-state .spin {
+  animation: spin 0.8s linear infinite;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #6366f1;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

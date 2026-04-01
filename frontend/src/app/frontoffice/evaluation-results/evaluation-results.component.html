@@ -1,0 +1,50 @@
+<div class="evaluation-results">
+  <div class="results-header" *ngIf="attempt">
+    <div class="score-card" [class.high]="getScorePercent() >= 70" [class.low]="getScorePercent() < 70">
+      <div class="score-circle">
+        <span class="score-value">{{ getTotalScore() }}</span>
+        <span class="score-max">/ {{ getMaxScore() }}</span>
+      </div>
+      <p class="score-label">{{ getScorePercent() | number:'1.0-0' }}%</p>
+    </div>
+    <h1>Evaluation Results</h1>
+    <p class="subtitle">Review your answers and see where you made mistakes.</p>
+    <p class="score-explanation" *ngIf="getTotalScore() < getMaxScore()">
+      Your score is based only on the questions you answered. Questions you did not answer count as 0.
+    </p>
+    <button mat-raised-button class="back-btn" (click)="backToEvaluations()">
+      <mat-icon>arrow_back</mat-icon>
+      Back to evaluations
+    </button>
+  </div>
+
+  <div class="answers-review" *ngIf="attempt?.studentAnswers?.length">
+    <h2>Your answers</h2>
+    <div class="answer-block" *ngFor="let ans of (attempt?.studentAnswers || []); let i = index" [class.incorrect]="!isCorrect(ans)">
+      <div class="answer-header">
+        <span class="q-num">Q{{ i + 1 }}</span>
+        <span class="q-type">{{ ans.question?.questionType }}</span>
+        <span class="points" [class.correct]="isCorrect(ans)" [class.wrong]="!isCorrect(ans)">
+          {{ ans.scoreAwarded ?? 0 }} / {{ ans.question?.points ?? 0 }} pts
+        </span>
+      </div>
+      <p class="q-text">{{ ans.question?.questionText }}</p>
+      <div class="your-answer">
+        <strong>Your answer:</strong> {{ formatAnswer(ans) }}
+      </div>
+      <div class="feedback" *ngIf="!isCorrect(ans)">
+        <mat-icon>error</mat-icon>
+        <span>Incorrect or partially correct. Review the question and try again next time.</span>
+      </div>
+      <div class="feedback correct" *ngIf="isCorrect(ans)">
+        <mat-icon>check_circle</mat-icon>
+        <span>Correct!</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading results...</p>
+  </div>
+</div>

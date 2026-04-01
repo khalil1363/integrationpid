@@ -1,0 +1,80 @@
+<div class="evaluation-attempts">
+  <div class="page-header">
+    <div class="header-content">
+      <button mat-icon-button (click)="back()" class="back-btn"><mat-icon>arrow_back</mat-icon></button>
+      <div>
+        <h1>Student attempts</h1>
+        <p class="header-subtitle">{{ evaluation?.title }} – view answers and modify scores</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="attempts-list" *ngIf="!loading">
+    <div class="attempt-card" *ngFor="let a of attempts" (click)="viewAttempt(a)">
+      <div class="attempt-user">
+        <mat-icon>person</mat-icon>
+        <span>{{ userName(a.userId) }}</span>
+      </div>
+      <div class="attempt-meta">
+        <span>Attempt #{{ a.attemptNumber }}</span>
+        <span>{{ a.status }}</span>
+        <span class="score" *ngIf="a.score != null">Score: {{ a.score }}</span>
+      </div>
+      <div class="attempt-date">{{ formatDate(a.startTime) }}</div>
+      <mat-icon class="chevron">chevron_right</mat-icon>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && attempts.length === 0">
+    <mat-icon>assignment_turned_in</mat-icon>
+    <p>No attempts yet for this evaluation</p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Detail panel -->
+  <div class="detail-overlay" *ngIf="selectedAttempt" (click)="closeAttempt()">
+    <div class="detail-panel" (click)="$event.stopPropagation()">
+      <div class="detail-header">
+        <h2>{{ userName(selectedAttempt.userId) }} – Attempt #{{ selectedAttempt.attemptNumber }}</h2>
+        <button mat-icon-button (click)="closeAttempt()"><mat-icon>close</mat-icon></button>
+      </div>
+      <div class="detail-score">
+        Total score: <strong>{{ selectedAttempt.score ?? 0 }}</strong>
+      </div>
+      <div class="answers-list">
+        <div class="answer-item" *ngFor="let ans of selectedAttempt.studentAnswers">
+          <div class="answer-question">
+            <span class="q-type">{{ ans.question?.questionType }}</span>
+            <p>{{ ans.question?.questionText }}</p>
+          </div>
+          <div class="answer-response">
+            <span class="label">Student response:</span>
+            <span *ngIf="ans.textAnswer">{{ ans.textAnswer }}</span>
+            <span *ngIf="ans.selectedOptions?.length">
+              {{ formatSelectedOptions(ans) }}
+            </span>
+          </div>
+          <div class="answer-score">
+            <span>Score: </span>
+            <ng-container *ngIf="editingScoreAnswerId === ans.id">
+              <input type="number" [(ngModel)]="newScoreValue" min="0" step="0.5" class="score-input">
+              <button mat-raised-button color="primary" (click)="saveScore(ans)">Save</button>
+              <button mat-stroked-button (click)="cancelEditScore()">Cancel</button>
+            </ng-container>
+            <ng-container *ngIf="editingScoreAnswerId !== ans.id">
+              <strong [class.correct]="isCorrect(ans)" [class.incorrect]="!isCorrect(ans)">{{ ans.scoreAwarded ?? 0 }}</strong>
+              <span> / {{ ans.question?.points ?? 0 }}</span>
+              <button mat-icon-button (click)="startEditScore(ans)" matTooltip="Edit score">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

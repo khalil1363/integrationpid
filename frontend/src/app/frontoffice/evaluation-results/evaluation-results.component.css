@@ -1,0 +1,238 @@
+/* ===== E-LEARNING STYLE: Evaluation Results (Frontoffice) ===== */
+
+.evaluation-results {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 48px;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.score-card {
+  display: inline-block;
+  padding: 40px 56px;
+  border-radius: 24px;
+  margin-bottom: 28px;
+  background: #f8fafc;
+  border: 3px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.score-card.high {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: #10b981;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+}
+
+.score-card.low {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #f87171;
+  box-shadow: 0 4px 14px rgba(248, 113, 113, 0.2);
+}
+
+.score-circle {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.score-max {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.score-card.high .score-value {
+  color: #047857;
+}
+
+.score-card.low .score-value {
+  color: #dc2626;
+}
+
+.score-label {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #64748b;
+  margin: 12px 0 0 0;
+}
+
+.score-explanation {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 20px 0;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.results-header h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 10px 0;
+  letter-spacing: -0.02em;
+}
+
+.results-header .subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0 0 24px 0;
+  font-weight: 500;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  text-transform: none;
+  font-weight: 600;
+  padding: 10px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.back-btn mat-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.answers-review h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.01em;
+}
+
+.answer-block {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0,0,0,0.04);
+  border-left: 4px solid #10b981;
+  transition: box-shadow 0.2s ease;
+}
+
+.answer-block:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+}
+
+.answer-block.incorrect {
+  border-left-color: #f87171;
+}
+
+.answer-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.q-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.q-type {
+  font-size: 0.6875rem;
+  color: #64748b;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.points {
+  margin-left: auto;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: #f1f5f9;
+}
+
+.points.correct {
+  color: #047857;
+  background: #ecfdf5;
+}
+
+.points.wrong {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.q-text {
+  font-size: 0.9375rem;
+  color: #334155;
+  line-height: 1.55;
+  margin: 0 0 14px 0;
+}
+
+.your-answer {
+  font-size: 0.875rem;
+  color: #475569;
+  margin-bottom: 14px;
+}
+
+.feedback {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.feedback mat-icon {
+  font-size: 22px;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.feedback.correct {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: #64748b;
+}
+
+.loading-state .spin {
+  animation: spin 0.8s linear infinite;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #6366f1;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

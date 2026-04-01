@@ -1,0 +1,110 @@
+<div class="evaluations-list">
+  <div class="page-header">
+    <div class="welcome-card">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="hero-shape hero-shape-3"></div>
+      <div class="welcome-content">
+        <div class="welcome-text">
+          <span class="hero-badge">Your learning path</span>
+          <h1>My Evaluations</h1>
+          <p>Choose a quiz below and show what you know. Each card opens when you’re ready.</p>
+        </div>
+        <div class="welcome-icon">
+          <div class="icon-wrapper">
+            <mat-icon>quiz</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Urgent: evaluations ending in 3 days or less (small clickable bar → popup) -->
+  <button type="button" class="deadline-warning-bar deadline-warning-urgent"
+    *ngIf="!loading && evaluationsDeadlineUnder3Days.length > 0"
+    (click)="openDeadlineDialog('Ending in 3 days or less', evaluationsDeadlineUnder3Days, 'danger')">
+    <mat-icon>error</mat-icon>
+    <span>Ending in 3 days or less</span>
+    <span class="deadline-count">({{ evaluationsDeadlineUnder3Days.length }})</span>
+  </button>
+
+  <!-- Warning: evaluations ending in less than 7 days (small clickable bar → popup) -->
+  <button type="button" class="deadline-warning-bar"
+    *ngIf="!loading && evaluationsDeadlineUnder7Days.length > 0"
+    (click)="openDeadlineDialog('Evaluations ending in less than 7 days', evaluationsDeadlineUnder7Days, 'prepared')">
+    <mat-icon>warning</mat-icon>
+    <span>Ending in less than 7 days</span>
+    <span class="deadline-count">({{ evaluationsDeadlineUnder7Days.length }})</span>
+  </button>
+
+  <div class="toolbar" *ngIf="!loading && evaluations.length > 0">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search by title</mat-label>
+      <input matInput [(ngModel)]="searchText" (ngModelChange)="pageIndex = 0" placeholder="Type to search...">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filter</mat-label>
+      <mat-select [(ngModel)]="filterStatus" (ngModelChange)="pageIndex = 0">
+        <mat-option value="all">All</mat-option>
+        <mat-option value="upcoming">Upcoming</mat-option>
+        <mat-option value="ongoing">Ongoing</mat-option>
+        <mat-option value="past">Past</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="eval-grid" *ngIf="!loading">
+    <div class="eval-card" *ngFor="let e of paginatedEvaluations" (click)="startEvaluation(e)"
+         [class.eval-card-urgent]="isDeadlineUnder3Days(e)">
+      <div class="card-top-strip"></div>
+      <div class="eval-image" [style.backgroundImage]="getEvaluationImageStyle(e.imageUrl)">
+        <span class="eval-badge">{{ e.numberOfAttempts }} attempt(s)</span>
+        <span class="eval-time-left"
+              [class.expired]="getTimeLeftDisplay(e.dateEnd) === 'Expired'"
+              [class.eval-time-left-urgent]="isDeadlineUnder3Days(e)">
+          {{ getTimeLeftDisplay(e.dateEnd) }}
+        </span>
+        <div class="play-overlay">
+          <span class="play-btn"><mat-icon>play_arrow</mat-icon></span>
+        </div>
+      </div>
+      <div class="eval-content">
+        <h3>{{ e.title }}</h3>
+        <div class="eval-meta">
+          <span><mat-icon>event</mat-icon> Until {{ formatDate(e.dateEnd) }}</span>
+          <span><mat-icon>schedule</mat-icon> {{ e.durationMinutes }} min</span>
+          <span><mat-icon>star</mat-icon> {{ e.totalScore }} pts</span>
+        </div>
+        <button mat-raised-button class="start-btn">
+          <mat-icon>play_arrow</mat-icon>
+          Start evaluation
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-paginator *ngIf="!loading && totalFiltered > 0"
+    [length]="totalFiltered"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="[6, 9, 12, 24]"
+    [pageIndex]="pageIndex"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+
+  <div class="no-results" *ngIf="!loading && evaluations.length > 0 && totalFiltered === 0">
+    <mat-icon>search_off</mat-icon>
+    <p>No evaluations match your search or filter.</p>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading evaluations...</p>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && evaluations.length === 0">
+    <mat-icon>assignment</mat-icon>
+    <p>No evaluations available right now</p>
+    <p class="hint">Check back later or contact your teacher.</p>
+  </div>
+</div>

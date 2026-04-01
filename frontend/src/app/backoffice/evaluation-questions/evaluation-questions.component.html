@@ -1,0 +1,172 @@
+<div class="evaluation-questions">
+  <div class="page-header">
+    <div class="header-content">
+      <button mat-icon-button (click)="back()" class="back-btn"><mat-icon>arrow_back</mat-icon></button>
+      <div>
+        <h1>{{ evaluation?.title || 'Questions' }}</h1>
+        <p class="header-subtitle">Add MCQ, MSQ, Fill in the blanks, Reading and Writing questions</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button mat-stroked-button (click)="setAdding('MCQ')">+ MCQ</button>
+      <button mat-stroked-button (click)="setAdding('MSQ')">+ MSQ</button>
+      <button mat-stroked-button (click)="setAdding('FILL_BLANK')">+ Fill blank</button>
+      <button mat-stroked-button (click)="setAdding('READING')">+ Reading</button>
+      <button mat-stroked-button (click)="setAdding('WRITING')">+ Writing</button>
+    </div>
+  </div>
+
+  <div class="questions-list" *ngIf="!loading">
+    <div class="q-item" *ngFor="let q of questions; let i = index">
+      <span class="q-order">{{ i + 1 }}</span>
+      <div class="q-body">
+        <span class="q-type">{{ questionTypeLabel(q.questionType) }}</span>
+        <p class="q-text">{{ q.questionText }}</p>
+        <span class="q-points">{{ q.points }} pts</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add MCQ -->
+  <div class="add-form card" *ngIf="addingType === 'MCQ'">
+    <h3>Add MCQ (single answer)</h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Question text</mat-label>
+      <textarea matInput rows="2" [(ngModel)]="newMCQ.questionText"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="short">
+      <mat-label>Points</mat-label>
+      <input matInput type="number" [(ngModel)]="newMCQ.points" min="0">
+    </mat-form-field>
+    <p class="label">Options (check one as correct)</p>
+    <div class="option-row" *ngFor="let opt of newMCQ.options; let i = index">
+      <mat-checkbox [(ngModel)]="opt.isCorrect"></mat-checkbox>
+      <input class="opt-input" [(ngModel)]="opt.optionText" placeholder="Option text">
+      <button mat-icon-button (click)="removeOptionMCQ(i)" *ngIf="newMCQ.options.length > 2"><mat-icon>close</mat-icon></button>
+    </div>
+    <button mat-button (click)="addOptionMCQ()"><mat-icon>add</mat-icon> Add option</button>
+    <div class="form-actions">
+      <button mat-stroked-button (click)="addingType = null">Cancel</button>
+      <button mat-raised-button class="primary-btn" (click)="submitMCQ()">Add MCQ</button>
+    </div>
+  </div>
+
+  <!-- Add MSQ -->
+  <div class="add-form card" *ngIf="addingType === 'MSQ'">
+    <h3>Add MSQ (multiple answers)</h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Question text</mat-label>
+      <textarea matInput rows="2" [(ngModel)]="newMSQ.questionText"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="short">
+      <mat-label>Points</mat-label>
+      <input matInput type="number" [(ngModel)]="newMSQ.points" min="0">
+    </mat-form-field>
+    <p class="label">Options (check all that are correct)</p>
+    <div class="option-row" *ngFor="let opt of newMSQ.options; let i = index">
+      <mat-checkbox [(ngModel)]="opt.isCorrect"></mat-checkbox>
+      <input class="opt-input" [(ngModel)]="opt.optionText" placeholder="Option text">
+      <button mat-icon-button (click)="removeOptionMSQ(i)" *ngIf="newMSQ.options.length > 2"><mat-icon>close</mat-icon></button>
+    </div>
+    <button mat-button (click)="addOptionMSQ()"><mat-icon>add</mat-icon> Add option</button>
+    <div class="form-actions">
+      <button mat-stroked-button (click)="addingType = null">Cancel</button>
+      <button mat-raised-button class="primary-btn" (click)="submitMSQ()">Add MSQ</button>
+    </div>
+  </div>
+
+  <!-- Add Fill blank -->
+  <div class="add-form card" *ngIf="addingType === 'FILL_BLANK'">
+    <h3>Add Fill in the blanks</h3>
+    <p class="form-hint">Students will see the paragraph with empty blanks and a word bank at the top. They drag and drop each word into the correct blank.</p>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Paragraph (use ____ for each blank)</mat-label>
+      <textarea matInput rows="4" [(ngModel)]="newFillBlank.paragraphText" placeholder="e.g. The capital of France is ____ and the capital of Italy is ____."></textarea>
+      <mat-hint>Use exactly one ____ for each blank. Add the matching words below in the same order.</mat-hint>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="short">
+      <mat-label>Points</mat-label>
+      <input matInput type="number" [(ngModel)]="newFillBlank.points" min="0">
+    </mat-form-field>
+    <p class="label">Words for the blanks (in order – students will see these to drag into the blanks)</p>
+    <div class="option-row" *ngFor="let b of newFillBlank.blanks; let i = index">
+      <input class="opt-input" [(ngModel)]="b.correctWord" [placeholder]="'Word for blank ' + (i+1)">
+      <button mat-icon-button (click)="removeBlank(i)" *ngIf="newFillBlank.blanks.length > 1"><mat-icon>close</mat-icon></button>
+    </div>
+    <button mat-button (click)="addBlank()"><mat-icon>add</mat-icon> Add another word (adds one more blank)</button>
+    <div class="form-actions">
+      <button mat-stroked-button (click)="addingType = null">Cancel</button>
+      <button mat-raised-button class="primary-btn" (click)="submitFillBlank()">Add Fill blank</button>
+    </div>
+  </div>
+
+  <!-- Add Reading -->
+  <div class="add-form card" *ngIf="addingType === 'READING'">
+    <h3>Add Reading question</h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Question text</mat-label>
+      <textarea matInput rows="2" [(ngModel)]="newReading.questionText"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Instructions</mat-label>
+      <input matInput [(ngModel)]="newReading.instructions">
+    </mat-form-field>
+    <div class="pdf-upload full-width">
+      <mat-label class="upload-label">Reading PDF (optional)</mat-label>
+      <input #pdfInput type="file" accept=".pdf,application/pdf" hidden (change)="onReadingPdfSelected($event)">
+      <div class="upload-row">
+        <button mat-stroked-button type="button" (click)="triggerPdfInput(pdfInput)" [disabled]="uploadingPdf">
+          <mat-icon>upload</mat-icon>
+          {{ uploadingPdf ? 'Uploading...' : 'Upload PDF' }}
+        </button>
+        <span class="file-name" *ngIf="readingPdfFileName">{{ readingPdfFileName }}</span>
+        <button mat-icon-button type="button" *ngIf="newReading.pdfUrl" (click)="clearReadingPdf()" matTooltip="Remove PDF">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+      <p class="form-hint" *ngIf="newReading.pdfUrl">AI (Ollama, free): generate 10 questions from this PDF. Install from <a href="https://ollama.com" target="_blank">ollama.com</a> and run: <code>ollama pull llama3.2</code></p>
+      <button mat-stroked-button type="button" *ngIf="newReading.pdfUrl" (click)="generateReadingWithAi()" [disabled]="generatingAi" class="ai-btn">
+        <mat-icon>auto_awesome</mat-icon>
+        {{ generatingAi ? 'Generating...' : 'Generate 10 questions with AI' }}
+      </button>
+    </div>
+    <mat-form-field appearance="outline" class="short">
+      <mat-label>Points</mat-label>
+      <input matInput type="number" [(ngModel)]="newReading.points" min="0">
+    </mat-form-field>
+    <div class="form-actions">
+      <button mat-stroked-button (click)="addingType = null">Cancel</button>
+      <button mat-raised-button class="primary-btn" (click)="submitReading()">Add Reading</button>
+    </div>
+  </div>
+
+  <!-- Add Writing -->
+  <div class="add-form card" *ngIf="addingType === 'WRITING'">
+    <h3>Add Writing question</h3>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Question / prompt</mat-label>
+      <textarea matInput rows="3" [(ngModel)]="newWriting.questionText"></textarea>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="half">
+      <mat-label>Subject</mat-label>
+      <input matInput [(ngModel)]="newWriting.subject">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="half">
+      <mat-label>Max words</mat-label>
+      <input matInput type="number" [(ngModel)]="newWriting.maxWords" min="0">
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="short">
+      <mat-label>Points</mat-label>
+      <input matInput type="number" [(ngModel)]="newWriting.points" min="0">
+    </mat-form-field>
+    <div class="form-actions">
+      <button mat-stroked-button (click)="addingType = null">Cancel</button>
+      <button mat-raised-button class="primary-btn" (click)="submitWriting()">Add Writing</button>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading...</p>
+  </div>
+</div>

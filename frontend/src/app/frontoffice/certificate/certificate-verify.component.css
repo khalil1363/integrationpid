@@ -1,0 +1,104 @@
+.verify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(145deg, #f5f0e6 0%, #e8e0d0 100%);
+}
+
+.verify-card {
+  max-width: 480px;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(250,248,243,0.98) 100%);
+  border: 3px solid #c9a227;
+  border-radius: 16px;
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+}
+
+.verify-logo {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #1a1a2e;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.verify-intro {
+  font-size: 18px;
+  color: #333;
+  margin: 0 0 16px 0;
+}
+
+.verify-statement {
+  font-size: 20px;
+  color: #1a1a2e;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.verify-statement strong {
+  color: #c9a227;
+}
+
+.verify-level {
+  font-size: 16px;
+  color: #333;
+  margin: 0 0 12px 0;
+}
+
+.verify-level strong {
+  color: #c9a227;
+}
+
+.verify-date {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+  margin: 0 0 32px 0;
+}
+
+.signature-block {
+  margin: 24px 0;
+  text-align: center;
+}
+
+.signature-line {
+  width: 180px;
+  height: 2px;
+  background: #1a1a2e;
+  margin: 0 auto 8px auto;
+}
+
+.signature-label {
+  font-family: 'Dancing Script', 'Brush Script MT', cursive;
+  font-size: 22px;
+  color: #333;
+  margin: 0;
+  font-weight: 600;
+}
+
+.verify-seal {
+  margin-top: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.seal-text {
+  text-align: center;
+  line-height: 1.2;
+}

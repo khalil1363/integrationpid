@@ -1,0 +1,85 @@
+<div class="certificate-page">
+  <div class="loading-state" *ngIf="loading">
+    <mat-icon class="spin">refresh</mat-icon>
+    <p>Loading...</p>
+  </div>
+
+  <ng-container *ngIf="!loading">
+    <!-- Certificate card (when eligible) -->
+    <div class="certificate-wrapper" *ngIf="eligible">
+      <div class="certificate" #certificateEl>
+        <div class="certificate-border">
+          <div class="certificate-inner">
+            <div class="certificate-header">
+              <div class="platform-logo">{{ platformName }}</div>
+              <div class="certificate-badge">
+                <mat-icon>verified</mat-icon>
+                <span>Certificate of Achievement</span>
+              </div>
+            </div>
+            <div class="certificate-body">
+              <p class="certificate-label">This is to certify that</p>
+              <h1 class="student-name">{{ studentName || 'Certificate Holder' }}</h1>
+              <p class="congrats-message">{{ congratulationMessage }}</p>
+              <p class="certificate-level" *ngIf="certificateLevel">
+                <span class="level-label">Level achieved:</span>
+                <strong class="level-value">{{ certificateLevel }}</strong>
+              </p>
+              <div class="passed-evaluations" *ngIf="passedEvaluationTitles.length > 0">
+                <p class="passed-evaluations-label">Passed evaluations (required for this certificate):</p>
+                <ul class="passed-evaluations-list">
+                  <li *ngFor="let title of passedEvaluationTitles">{{ title }}</li>
+                </ul>
+              </div>
+              <p class="certificate-date">{{ certificateDate }}</p>
+            </div>
+            <div class="certificate-footer">
+              <div class="footer-row">
+                <div class="seal">
+                  <mat-icon>school</mat-icon>
+                  <span>{{ platformName }}</span>
+                </div>
+                <div class="qrcode-block">
+                  <qrcode *ngIf="showQr && verificationUrl"
+                    [qrdata]="verificationUrl"
+                    [width]="96"
+                    [errorCorrectionLevel]="'M'"
+                    [elementType]="'img'"></qrcode>
+                  <p class="qrcode-hint">Scan to verify</p>
+                </div>
+              </div>
+              <p class="awarded-to">Awarded to <strong>{{ studentName || 'Certificate Holder' }}</strong></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="certificate-actions">
+        <button mat-raised-button class="export-pdf-btn" (click)="exportPdf()" [disabled]="exportingPdf">
+          <mat-icon>picture_as_pdf</mat-icon>
+          {{ exportingPdf ? 'Exporting...' : 'Export PDF' }}
+        </button>
+        <button mat-raised-button class="back-btn" (click)="backToEvaluations()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to evaluations
+        </button>
+      </div>
+    </div>
+
+    <!-- Not eligible yet -->
+    <div class="not-eligible" *ngIf="!eligible">
+      <div class="not-eligible-card">
+        <mat-icon class="icon-lock">lock</mat-icon>
+        <h2>Certificate not yet available</h2>
+        <p class="progress-text">{{ congratulationMessage }}</p>
+        <div class="progress-bar-wrap">
+          <div class="progress-fill" [style.width.%]="(passedCount / requiredPassed) * 100"></div>
+        </div>
+        <p class="hint">Pass {{ requiredPassed - passedCount }} more evaluation(s) with 50% or above to unlock your {{ platformName }} certificate.</p>
+        <button mat-raised-button class="back-btn" (click)="backToEvaluations()">
+          <mat-icon>assignment</mat-icon>
+          Go to evaluations
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</div>

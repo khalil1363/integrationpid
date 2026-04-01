@@ -1,0 +1,342 @@
+/* Wrapper: flex column so content scrolls and actions stay at bottom */
+.deadline-dialog {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  animation: dialogSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ----- Header (base) ----- */
+.dialog-header {
+  margin: 0 -24px 20px -24px;
+  padding: 24px 24px 20px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dialog-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 60%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.zone-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.header-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+  color: white;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+@keyframes dangerPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.45); }
+  50% { box-shadow: 0 0 0 10px rgba(220, 38, 38, 0); }
+}
+
+.dialog-header h2 {
+  color: white !important;
+  margin: 0 0 4px 0 !important;
+  font-size: 1.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  position: relative;
+  z-index: 1;
+}
+
+.header-subtitle {
+  font-size: 0.75rem;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ----- Danger zone theme ----- */
+.deadline-dialog.danger-zone .dialog-header {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 40%, #991b1b 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(220, 38, 38, 0.35);
+}
+
+.deadline-dialog.danger-zone .zone-badge {
+  background: rgba(0,0,0,0.25);
+  color: #fecaca;
+}
+
+.deadline-dialog.danger-zone .header-icon {
+  background: rgba(0,0,0,0.2);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  animation: dangerPulse 1.8s ease-in-out infinite;
+}
+
+.deadline-dialog.danger-zone .header-subtitle {
+  color: rgba(255,255,255,0.9);
+}
+
+.deadline-dialog.danger-zone .deadline-dialog-list li:hover {
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.2);
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+.deadline-dialog.danger-zone .item-icon {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+}
+
+.deadline-dialog.danger-zone .time-pill {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.45);
+}
+
+.deadline-dialog.danger-zone .close-btn {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4) !important;
+}
+
+.deadline-dialog.danger-zone .close-btn:hover {
+  box-shadow: 0 8px 28px rgba(220, 38, 38, 0.5) !important;
+}
+
+/* ----- Prepared zone theme ----- */
+.deadline-dialog.prepared-zone .dialog-header {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 40%, #92400e 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 32px rgba(217, 119, 6, 0.3);
+}
+
+.deadline-dialog.prepared-zone .zone-badge {
+  background: rgba(255,255,255,0.25);
+  color: #fef3c7;
+}
+
+.deadline-dialog.prepared-zone .header-icon {
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+.deadline-dialog.prepared-zone .header-subtitle {
+  color: rgba(255,255,255,0.92);
+}
+
+.deadline-dialog.prepared-zone .deadline-dialog-list li:hover {
+  box-shadow: 0 8px 24px rgba(217, 119, 6, 0.18);
+  border-color: rgba(217, 119, 6, 0.4);
+}
+
+.deadline-dialog.prepared-zone .item-icon {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+}
+
+.deadline-dialog.prepared-zone .time-pill {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.deadline-dialog.prepared-zone .close-btn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%) !important;
+  box-shadow: 0 6px 20px rgba(217, 119, 6, 0.4) !important;
+}
+
+.deadline-dialog.prepared-zone .close-btn:hover {
+  box-shadow: 0 8px 28px rgba(217, 119, 6, 0.5) !important;
+}
+
+/* ----- Content: scrollable, close always visible ----- */
+mat-dialog-content {
+  padding: 8px 24px 16px !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  flex: 1 1 auto;
+}
+
+.deadline-dialog-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 280px;
+}
+
+.deadline-dialog-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  animation: itemFadeIn 0.4s ease-out backwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.deadline-dialog-list li:hover {
+  transform: translateX(6px);
+}
+
+.deadline-dialog-list li:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes itemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.item-icon {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-icon mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.item-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-go-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #94a3b8;
+  flex-shrink: 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.deadline-dialog-list li:hover .item-go-icon {
+  color: #4f46e5;
+  transform: translateX(2px);
+}
+
+.deadline-dialog.danger-zone .deadline-dialog-list li:hover .item-go-icon {
+  color: #dc2626;
+}
+
+.deadline-dialog.prepared-zone .deadline-dialog-list li:hover .item-go-icon {
+  color: #d97706;
+}
+
+.item-body strong {
+  display: block;
+  font-size: 0.9rem;
+  color: #1e1b4b;
+  margin-bottom: 6px;
+  line-height: 1.35;
+}
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+.until {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+/* ----- Actions: always visible at bottom ----- */
+mat-dialog-actions {
+  padding: 14px 24px 18px !important;
+  margin: 0 !important;
+  min-height: auto !important;
+  border-top: 1px solid #e2e8f0;
+  background: #fafbfc;
+  border-radius: 0 0 16px 16px;
+  flex-shrink: 0;
+}
+
+.close-btn {
+  color: white !important;
+  font-weight: 700 !important;
+  padding: 8px 20px !important;
+  border-radius: 10px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.close-btn:hover {
+  transform: translateY(-2px);
+}
+
+.close-btn mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+}

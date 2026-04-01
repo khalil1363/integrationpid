@@ -1,0 +1,32 @@
+<div class="deadline-dialog" [class.danger-zone]="isDangerZone" [class.prepared-zone]="isPreparedZone">
+  <div class="dialog-header">
+    <div class="header-icon">
+      <mat-icon>{{ isDangerZone ? 'warning' : 'schedule' }}</mat-icon>
+    </div>
+    <span class="zone-badge">{{ isDangerZone ? 'Danger zone' : 'Prepare zone' }}</span>
+    <h2 mat-dialog-title>{{ dialogTitle }}</h2>
+    <p class="header-subtitle">{{ isDangerZone ? 'Due very soon — act now' : 'Get ready — plan your time' }}</p>
+  </div>
+  <mat-dialog-content>
+    <ul class="deadline-dialog-list">
+      <li *ngFor="let e of evaluations; let i = index" [style.animation-delay]="(i * 0.07) + 's'"
+          (click)="goToEvaluation(e)" role="button" tabindex="0" (keydown.enter)="goToEvaluation(e)" (keydown.space)="goToEvaluation(e)">
+        <div class="item-icon"><mat-icon>assignment</mat-icon></div>
+        <div class="item-body">
+          <strong>{{ e.title }}</strong>
+          <div class="item-meta">
+            <span class="time-pill">{{ getTimeLeftDisplay(e.dateEnd) }}</span>
+            <span class="until">Until {{ formatDate(e.dateEnd) }}</span>
+          </div>
+        </div>
+        <mat-icon class="item-go-icon">play_arrow</mat-icon>
+      </li>
+    </ul>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-raised-button class="close-btn" mat-dialog-close>
+      <mat-icon>check_circle</mat-icon>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>
