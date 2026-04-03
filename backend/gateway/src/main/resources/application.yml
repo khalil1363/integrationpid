@@ -1,0 +1,21 @@
+# CORS for the SPA hitting the gateway (works for proxied routes; CorsWebFilter alone often misses them).
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"
+              - "http://localhost:61968"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+              - PATCH
+            allowedHeaders:
+              - "*"
+            allowCredentials: false
+            maxAge: 3600

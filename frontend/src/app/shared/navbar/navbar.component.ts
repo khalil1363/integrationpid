@@ -6,6 +6,13 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+  /** Neutral placeholder when no photo (no external network). */
+  readonly defaultAvatar =
+    'data:image/svg+xml,' +
+    encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect fill="#bdbdbd" width="40" height="40" rx="8"/></svg>'
+    );
+
   @Input() theme: 'light' | 'dark' = 'light';
   @Input() username: string = 'User';
   @Input() userAvatar: string = '';

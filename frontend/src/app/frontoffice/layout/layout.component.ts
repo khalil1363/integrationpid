@@ -23,6 +23,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   frontofficeMenuItems: MenuItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: 'dashboard', routerLink: '/frontoffice/dashboard' },
     { id: 'evaluations', label: 'Evaluations', icon: 'assignment', routerLink: '/frontoffice/evaluations' },
+    { id: 'notebook', label: 'Smart Notebook', icon: 'edit_note', routerLink: '/frontoffice/notebook' },
     { id: 'certificate', label: 'My Certificate', icon: 'workspace_premium', routerLink: '/frontoffice/certificate' },
     { id: 'profile', label: 'Profile', icon: 'person', routerLink: '/frontoffice/profile' },
     { id: 'courses', label: 'Courses', icon: 'school', routerLink: '/frontoffice/courses' },
@@ -55,8 +56,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         }
       } else {
         const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
-        this.userAvatar =
-          `https://via.placeholder.com/40x40/667eea/ffffff?text=${encodeURIComponent(initials)}`;
+        this.userAvatar = LayoutComponent.initialsAvatarDataUrl(initials);
       }
       // Afficher l'overlay de bienvenue une fois pour un étudiant sur le dashboard
       if (this.isStudentRole(user) && this.isOnDashboard() && !this.showWelcomeOverlay && !this.welcomeOverlayShown) {
@@ -130,5 +130,16 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   onSettings() {
     this.router.navigate(['/frontoffice/settings']);
+  }
+
+  /** No external request (via.placeholder often blocked offline). */
+  private static initialsAvatarDataUrl(initials: string): string {
+    const t = initials.slice(0, 2).replace(/[<>&"']/g, '');
+    const svg =
+      `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40">` +
+      `<rect fill="#667eea" width="40" height="40" rx="8"/>` +
+      `<text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="#fff" ` +
+      `font-family="system-ui,sans-serif" font-size="14" font-weight="600">${t}</text></svg>`;
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
   }
 }

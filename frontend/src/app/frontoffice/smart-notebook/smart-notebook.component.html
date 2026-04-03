@@ -1,0 +1,125 @@
+<div class="sn-root">
+  <header class="sn-hero">
+    <div class="sn-hero-glow"></div>
+    <div class="sn-hero-inner">
+      <div class="sn-badge"><mat-icon>auto_awesome</mat-icon> Smart Notebook</div>
+      <h1>Think clearer. Write smarter.</h1>
+      <p>Grammar, summaries, and smart definitions powered by your local Ollama — plus voice and insights.</p>
+    </div>
+  </header>
+
+  <mat-tab-group [(selectedIndex)]="tabIndex" class="sn-tabs" animationDuration="200ms">
+    <mat-tab label="Notebook">
+      <div class="sn-layout">
+        <aside class="sn-rail">
+          <button mat-raised-button color="primary" class="sn-new" (click)="newNote()">
+            <mat-icon>note_add</mat-icon> New page
+          </button>
+          <div class="sn-rail-list" *ngIf="!loading">
+            <button type="button" class="sn-note-pill" *ngFor="let n of notes"
+                    [class.active]="selected?.id === n.id" (click)="selectNote(n)">
+              <span class="pill-title">{{ n.title }}</span>
+              <span class="pill-meta">{{ n.updatedAt | date:'short' }}</span>
+            </button>
+          </div>
+          <div class="sn-loading" *ngIf="loading"><mat-icon class="spin">refresh</mat-icon></div>
+        </aside>
+
+        <main class="sn-paper">
+          <div class="sn-paper-toolbar">
+            <mat-form-field appearance="outline" class="sn-title-field">
+              <mat-label>Title</mat-label>
+              <input matInput [(ngModel)]="titleDraft" placeholder="Give this page a name">
+            </mat-form-field>
+            <div class="sn-actions">
+              <button mat-stroked-button (click)="runGrammar()" matTooltip="Local Ollama first, then LanguageTool online">
+                <mat-icon>spellcheck</mat-icon> Grammar
+              </button>
+              <button mat-stroked-button (click)="runSummarize()" matTooltip="Summary via Ollama when available">
+                <mat-icon>summarize</mat-icon> Summary
+              </button>
+              <button mat-stroked-button [color]="listening ? 'warn' : 'primary'" (click)="toggleVoice()">
+                <mat-icon>{{ listening ? 'mic_off' : 'mic' }}</mat-icon>
+                {{ listening ? 'Stop' : 'Voice' }}
+              </button>
+              <button mat-flat-button color="primary" (click)="saveNote()">
+                <mat-icon>save</mat-icon> Save
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteNote()" *ngIf="selected?.id" matTooltip="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <textarea class="sn-editor" [(ngModel)]="contentDraft" rows="18"
+                    placeholder="Start writing… Your lines stay private to your account."></textarea>
+
+          <section class="sn-dictionary card-ink">
+            <h3><mat-icon>menu_book</mat-icon> Smart dictionary</h3>
+            <div class="sn-dict-row">
+              <mat-form-field appearance="outline" class="sn-dict-input">
+                <mat-label>Word</mat-label>
+                <input matInput [(ngModel)]="dictWord" (keyup.enter)="runDictionary()">
+              </mat-form-field>
+              <button mat-raised-button color="accent" (click)="runDictionary()">Explain</button>
+            </div>
+            <div class="sn-dict-out" *ngIf="dictResult as dr">
+              <p class="phonetic" *ngIf="dr.phonetic">{{ dr.phonetic }}</p>
+              <ul>
+                <li *ngFor="let m of dr.meanings">{{ m }}</li>
+              </ul>
+              <div class="sn-ai-gloss" *ngIf="dr.aiExplanation">
+                <span class="sn-ai-badge"><mat-icon>psychology</mat-icon> Ollama</span>
+                <p>{{ dr.aiExplanation }}</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="sn-summary card-ink" *ngIf="summaryResult as sr">
+            <h3><mat-icon>short_text</mat-icon> Auto summary</h3>
+            <p class="sn-summary-meta">
+              {{ sr.summaryWordCount }} words (from {{ sr.originalWordCount }})
+              <span class="sn-ai-pill" *ngIf="sr.source === 'ollama'"><mat-icon class="sn-pill-ico">smart_toy</mat-icon> Ollama</span>
+              <span class="sn-ai-pill muted" *ngIf="sr.source === 'extractive'">Quick extract</span>
+            </p>
+            <p class="sn-summary-text">{{ sr.summary }}</p>
+            <button mat-stroked-button (click)="insertSummaryIntoNote()">Append to note</button>
+          </section>
+        </main>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Insights">
+      <div class="sn-dash" *ngIf="dashboard">
+        <div class="sn-dash-card best">
+          <div class="sn-dash-icon"><mat-icon>share</mat-icon></div>
+          <h2>Best note to share</h2>
+          <p class="hint">Ranked by depth &amp; vocabulary spread across your pages.</p>
+          <ng-container *ngIf="dashboard.bestNoteToShare as b; else noBest">
+            <h3>{{ b.title }}</h3>
+            <p class="score">Share score: <strong>{{ b.shareScore }}</strong></p>
+            <p class="preview">{{ (b.content || '').slice(0, 280) }}{{ (b.content || '').length > 280 ? '…' : '' }}</p>
+          </ng-container>
+          <ng-template #noBest>
+            <p class="empty">Write a few longer notes — your standout page will appear here.</p>
+          </ng-template>
+        </div>
+
+        <div class="sn-dash-card words">
+          <div class="sn-dash-icon"><mat-icon>analytics</mat-icon></div>
+          <h2>Most used words</h2>
+          <p class="hint">Across all your notes (common words filtered).</p>
+          <div class="sn-chips">
+            <span class="chip" *ngFor="let w of dashboard.mostUsedWords" [style.font-size.px]="12 + Math.min(14, w.count)">
+              {{ w.word }} <em>{{ w.count }}</em>
+            </span>
+          </div>
+          <p class="empty" *ngIf="!dashboard.mostUsedWords?.length">No vocabulary yet — keep writing!</p>
+        </div>
+      </div>
+      <div class="sn-dash-loading" *ngIf="!dashboard">
+        <mat-icon class="spin">refresh</mat-icon> Loading insights…
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

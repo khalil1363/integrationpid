@@ -17,6 +17,8 @@ import { CertificateVerifyComponent } from './certificate/certificate-verify.com
 import { SharedModule } from '../shared/shared.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { QRCodeModule } from 'angularx-qrcode';
+import { MatTabsModule } from '@angular/material/tabs';
+import { SmartNotebookComponent } from './smart-notebook/smart-notebook.component';
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     TakeEvaluationComponent,
     EvaluationResultsComponent,
     CertificateComponent,
-    CertificateVerifyComponent
+    CertificateVerifyComponent,
+    SmartNotebookComponent
   ],
   imports: [
     CommonModule,
@@ -40,7 +43,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     FrontofficeRoutingModule,
     SharedModule,
     MatProgressBarModule,
-    QRCodeModule
+    QRCodeModule,
+    MatTabsModule
   ]
 })
 export class FrontofficeModule { }

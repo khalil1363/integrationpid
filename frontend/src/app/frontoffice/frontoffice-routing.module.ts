@@ -10,6 +10,7 @@ import { TakeEvaluationComponent } from './take-evaluation/take-evaluation.compo
 import { EvaluationResultsComponent } from './evaluation-results/evaluation-results.component';
 import { CertificateComponent } from './certificate/certificate.component';
 import { CertificateVerifyComponent } from './certificate/certificate-verify.component';
+import { SmartNotebookComponent } from './smart-notebook/smart-notebook.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,7 @@ const routes: Routes = [
       ,{ path: 'evaluations/:id/take', component: TakeEvaluationComponent }
       ,{ path: 'evaluations/:id/results', component: EvaluationResultsComponent }
       ,{ path: 'certificate', component: CertificateComponent }
+      ,{ path: 'notebook', component: SmartNotebookComponent }
     ]
   },
   { path: 'certificate/verify', component: CertificateVerifyComponent }
