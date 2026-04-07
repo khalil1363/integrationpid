@@ -14,6 +14,5 @@ public class EvaluationApplication {
 		SpringApplication.run(EvaluationApplication.class, args);
 	}
 
-	// CORS is handled only at the gateway (8080). Do not add CORS here when behind the gateway,
-	// or the response would have duplicate Access-Control-Allow-Origin headers.
+
 }

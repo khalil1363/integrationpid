@@ -45,6 +45,20 @@ export interface NotebookDashboard {
   mostUsedWords: WordCountRow[];
 }
 
+export interface PronunciationCoachItem {
+  issue: string;
+  correction: string;
+  tip: string;
+}
+
+export interface PronunciationCoachResult {
+  overallSummary: string;
+  idealSentence?: string | null;
+  items: PronunciationCoachItem[];
+  overallTips: string[];
+  rawCoachText?: string | null;
+}
+
 @Injectable({ providedIn: 'root' })
 export class NotebookApiService {
   private readonly base = NOTEBOOK_API_URL;
@@ -81,5 +95,12 @@ export class NotebookApiService {
 
   summarize(text: string): Observable<SummaryResult> {
     return this.http.post<SummaryResult>(`${this.base}/ai/summarize`, { text });
+  }
+
+  pronunciationCoach(targetText: string, heardText: string): Observable<PronunciationCoachResult> {
+    return this.http.post<PronunciationCoachResult>(`${this.base}/ai/pronunciation-coach`, {
+      targetText,
+      heardText
+    });
   }
 }

@@ -11,7 +11,11 @@ C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\mic
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\DashboardResponse.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\model\Note.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\config\AppConfig.java
+C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\PronunciationCoachResponse.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\DictionaryResponse.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\SummaryResponse.java
+C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\service\PronunciationCoachService.java
+C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\PronunciationCoachRequest.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\service\NotebookService.java
 C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\service\SummaryService.java
+C:\Users\lpatron\OneDrive\Desktop\Ecole SlangEnglish\SlangEngish\PID\backend\microservices\notebook\src\main\java\esprit\notebook\dto\PronunciationCoachItem.java

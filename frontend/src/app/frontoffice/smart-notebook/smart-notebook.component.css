@@ -225,6 +225,123 @@
   font-size: 1rem;
 }
 
+.sn-coach-hint {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  opacity: 0.88;
+}
+
+.sn-coach-goal {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.sn-coach-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.sn-coach-live {
+  margin-bottom: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+.sn-coach-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(0, 0, 0, 0.45);
+  margin-bottom: 0.35rem;
+}
+
+.sn-coach-transcript {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+  min-height: 1.5em;
+}
+
+.sn-coach-loading {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.sn-coach-out {
+  margin-top: 0.75rem;
+}
+
+.sn-coach-items {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.sn-coach-items li {
+  margin-bottom: 0.65rem;
+  line-height: 1.45;
+}
+
+.sn-coach-items .fix {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.92rem;
+}
+
+.sn-coach-items .tip {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.sn-coach-tips {
+  margin: 0.75rem 0 0;
+  padding-left: 1.1rem;
+}
+
+.sn-coach-tips li {
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.sn-coach-ideal {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+}
+
+.sn-coach-ideal p {
+  margin: 0 0 0.65rem;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+.sn-coach-raw {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  white-space: pre-wrap;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  max-height: 240px;
+  overflow: auto;
+}
+
 .sn-dict-row {
   display: flex;
   flex-wrap: wrap;

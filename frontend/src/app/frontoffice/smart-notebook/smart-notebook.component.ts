@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 import { CurrentUserService } from '../../core/services/current-user.service';
@@ -9,6 +9,7 @@ import {
   NotebookApiService,
   NotebookDashboard,
   NotebookNote,
+  PronunciationCoachResult,
   SummaryResult
 } from '../../core/services/notebook-api.service';
 
@@ -30,7 +31,16 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
   dictResult: DictionaryResult | null = null;
   summaryResult: SummaryResult | null = null;
   dashboard: NotebookDashboard | null = null;
-  listening = false;
+  /** Mic on for speech-to-text into the note */
+  micActive = false;
+  /** 'dictate' = type into note; 'coach' = separate buffer for AI coach */
+  micRoute: 'dictate' | 'coach' = 'dictate';
+  coachHeard = '';
+  coachGoalText = '';
+  coachFeedback: PronunciationCoachResult | null = null;
+  coachLoading = false;
+  /** Browser text-to-speech (SpeechSynthesis) is active */
+  speaking = false;
   private recognition: { start: () => void; stop: () => void; lang: string; continuous: boolean; interimResults: boolean; onresult: ((ev: unknown) => void) | null; onerror: (() => void) | null; onend: (() => void) | null } | null = null;
 
   constructor(
@@ -38,6 +48,7 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     private snack: MatSnackBar,
     private auth: AuthService,
     private currentUser: CurrentUserService,
+    private zone: NgZone,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
@@ -62,6 +73,7 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     } catch {
       /* ignore */
     }
+    this.stopSpeaking();
   }
 
   private initSpeech(): void {
@@ -80,14 +92,24 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
       for (let i = e.resultIndex; i < e.results.length; i++) {
         chunk += e.results[i][0].transcript;
       }
-      this.contentDraft = (this.contentDraft + ' ' + chunk).trim();
+      this.zone.run(() => {
+        if (this.micRoute === 'dictate') {
+          this.contentDraft = (this.contentDraft + ' ' + chunk).trim();
+        } else {
+          this.coachHeard = (this.coachHeard + ' ' + chunk).trim();
+        }
+      });
     };
     this.recognition.onerror = () => {
-      this.listening = false;
-      this.snack.open('Voice input error. Try Chrome and allow microphone.', 'Close', { duration: 4000 });
+      this.zone.run(() => {
+        this.micActive = false;
+        this.snack.open('Voice input error. Try Chrome and allow microphone.', 'Close', { duration: 4000 });
+      });
     };
     this.recognition.onend = () => {
-      this.listening = false;
+      this.zone.run(() => {
+        this.micActive = false;
+      });
     };
   }
 
@@ -119,6 +141,7 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     this.contentDraft = n.content ?? '';
     this.dictResult = null;
     this.summaryResult = null;
+    this.clearCoachUi();
   }
 
   newNote(): void {
@@ -127,6 +150,12 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     this.contentDraft = '';
     this.dictResult = null;
     this.summaryResult = null;
+    this.clearCoachUi();
+  }
+
+  private clearCoachUi(): void {
+    this.coachHeard = '';
+    this.coachFeedback = null;
   }
 
   saveNote(): void {
@@ -194,23 +223,219 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleVoice(): void {
+  toggleDictate(): void {
     if (!this.recognition) {
       this.snack.open('Voice not supported in this browser', 'Close', { duration: 3000 });
       return;
     }
-    if (this.listening) {
-      this.recognition.stop();
-      this.listening = false;
+    if (this.micActive && this.micRoute === 'dictate') {
+      try {
+        this.recognition.stop();
+      } catch {
+        /* ignore */
+      }
+      this.micActive = false;
       return;
     }
-    this.listening = true;
+    if (this.micActive && this.micRoute === 'coach') {
+      try {
+        this.recognition.stop();
+      } catch {
+        /* ignore */
+      }
+      this.micActive = false;
+    }
+    this.micRoute = 'dictate';
+    this.micActive = true;
     try {
       this.recognition.start();
     } catch {
-      this.listening = false;
+      this.micActive = false;
       this.snack.open('Could not start microphone', 'Close', { duration: 3000 });
     }
+  }
+
+  /** Coach mic: listens into a separate buffer; does not change your note text. */
+  toggleCoachMic(): void {
+    if (!this.recognition) {
+      this.snack.open('Voice not supported in this browser', 'Close', { duration: 3000 });
+      return;
+    }
+    if (this.micActive && this.micRoute === 'coach') {
+      try {
+        this.recognition.stop();
+      } catch {
+        /* ignore */
+      }
+      this.micActive = false;
+      return;
+    }
+    if (this.micActive && this.micRoute === 'dictate') {
+      try {
+        this.recognition.stop();
+      } catch {
+        /* ignore */
+      }
+      this.micActive = false;
+    }
+    this.micRoute = 'coach';
+    this.coachHeard = '';
+    this.coachFeedback = null;
+    this.micActive = true;
+    try {
+      this.recognition.start();
+    } catch {
+      this.micActive = false;
+      this.snack.open('Could not start coach microphone', 'Close', { duration: 3000 });
+    }
+  }
+
+  resolveCoachTarget(host: HTMLTextAreaElement): string {
+    const goal = (this.coachGoalText ?? '').trim();
+    if (goal) {
+      return goal;
+    }
+    const lo = Math.min(host.selectionStart, host.selectionEnd);
+    const hi = Math.max(host.selectionStart, host.selectionEnd);
+    const sel = host.value.slice(lo, hi).trim();
+    return sel;
+  }
+
+  speakCoachTarget(host: HTMLTextAreaElement): void {
+    const t = this.resolveCoachTarget(host);
+    if (!t) {
+      this.snack.open('Type a practice line above or select text in your note.', 'Close', { duration: 3500 });
+      return;
+    }
+    if (this.speaking) {
+      this.stopSpeaking();
+    }
+    this.speakText(t);
+  }
+
+  runCoachAnalysis(host: HTMLTextAreaElement): void {
+    const heard = (this.coachHeard ?? '').trim();
+    if (!heard) {
+      this.snack.open('Use Coach mic first to capture what you said.', 'Close', { duration: 3500 });
+      return;
+    }
+    const target = this.resolveCoachTarget(host);
+    this.coachLoading = true;
+    this.coachFeedback = null;
+    this.api.pronunciationCoach(target, heard).subscribe({
+      next: (r) => {
+        this.coachFeedback = r;
+        this.coachLoading = false;
+      },
+      error: () => {
+        this.coachLoading = false;
+        this.snack.open('Coach request failed. Is Ollama + gateway + notebook running?', 'Close', { duration: 4500 });
+      }
+    });
+  }
+
+  speakIdealSentence(): void {
+    const s = (this.coachFeedback?.idealSentence ?? '').trim();
+    if (!s) {
+      this.snack.open('No ideal sentence from coach yet.', 'Close', { duration: 2500 });
+      return;
+    }
+    if (this.speaking) {
+      this.stopSpeaking();
+    }
+    this.speakText(s);
+  }
+
+  private ttsAvailable(): boolean {
+    return isPlatformBrowser(this.platformId) && typeof window !== 'undefined' && !!window.speechSynthesis;
+  }
+
+  /** Read title + full note (browser TTS, English). */
+  speakPage(): void {
+    if (!this.ttsAvailable()) {
+      this.snack.open('Read-aloud needs a browser with speech synthesis (e.g. Chrome).', 'Close', { duration: 4000 });
+      return;
+    }
+    const title = (this.titleDraft ?? '').trim();
+    const body = (this.contentDraft ?? '').trim();
+    const parts: string[] = [];
+    if (title) {
+      parts.push(title);
+    }
+    if (body) {
+      parts.push(body);
+    }
+    const text = parts.join('. ');
+    if (!text) {
+      this.snack.open('Write something to listen.', 'Close', { duration: 2500 });
+      return;
+    }
+    if (this.speaking) {
+      this.stopSpeaking();
+    }
+    this.speakText(text);
+  }
+
+  /** Read highlighted text in the note editor. */
+  speakSelection(host: HTMLTextAreaElement): void {
+    if (!this.ttsAvailable()) {
+      this.snack.open('Read-aloud not supported in this environment.', 'Close', { duration: 3000 });
+      return;
+    }
+    const lo = Math.min(host.selectionStart, host.selectionEnd);
+    const hi = Math.max(host.selectionStart, host.selectionEnd);
+    const text = host.value.slice(lo, hi).trim();
+    if (!text) {
+      this.snack.open('Select text in the note first, then tap Selection.', 'Close', { duration: 3500 });
+      return;
+    }
+    if (this.speaking) {
+      this.stopSpeaking();
+    }
+    this.speakText(text);
+  }
+
+  stopSpeaking(): void {
+    if (!this.ttsAvailable()) {
+      this.speaking = false;
+      return;
+    }
+    window.speechSynthesis.cancel();
+    this.speaking = false;
+  }
+
+  toggleReadAloud(): void {
+    if (this.speaking) {
+      this.stopSpeaking();
+    } else {
+      this.speakPage();
+    }
+  }
+
+  private speakText(text: string): void {
+    if (!this.ttsAvailable()) {
+      return;
+    }
+    const max = 32000;
+    const chunk = text.length > max ? text.slice(0, max) : text;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(chunk);
+    u.lang = 'en-US';
+    u.rate = 1;
+    u.pitch = 1;
+    u.onend = () => {
+      this.zone.run(() => {
+        this.speaking = false;
+      });
+    };
+    u.onerror = () => {
+      this.zone.run(() => {
+        this.speaking = false;
+        this.snack.open('Read-aloud was interrupted.', 'Close', { duration: 2500 });
+      });
+    };
+    this.speaking = true;
+    window.speechSynthesis.speak(u);
   }
 
   insertSummaryIntoNote(): void {

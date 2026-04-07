@@ -4,7 +4,7 @@
     <div class="sn-hero-inner">
       <div class="sn-badge"><mat-icon>auto_awesome</mat-icon> Smart Notebook</div>
       <h1>Think clearer. Write smarter.</h1>
-      <p>Grammar, summaries, and smart definitions powered by your local Ollama — plus voice and insights.</p>
+      <p>Grammar, summaries, smart definitions, dictate, read aloud, and an AI pronunciation coach — powered by your local Ollama where noted.</p>
     </div>
   </header>
 
@@ -38,9 +38,19 @@
               <button mat-stroked-button (click)="runSummarize()" matTooltip="Summary via Ollama when available">
                 <mat-icon>summarize</mat-icon> Summary
               </button>
-              <button mat-stroked-button [color]="listening ? 'warn' : 'primary'" (click)="toggleVoice()">
-                <mat-icon>{{ listening ? 'mic_off' : 'mic' }}</mat-icon>
-                {{ listening ? 'Stop' : 'Voice' }}
+              <button mat-stroked-button [color]="micActive && micRoute === 'dictate' ? 'warn' : 'primary'" (click)="toggleDictate()"
+                      matTooltip="Speech-to-text into your note (unchanged)">
+                <mat-icon>{{ micActive && micRoute === 'dictate' ? 'mic_off' : 'mic' }}</mat-icon>
+                {{ micActive && micRoute === 'dictate' ? 'Stop' : 'Dictate' }}
+              </button>
+              <button mat-stroked-button [color]="speaking ? 'warn' : 'primary'" (click)="toggleReadAloud()"
+                      matTooltip="Text-to-speech: read title + note (browser)">
+                <mat-icon>{{ speaking ? 'stop_circle' : 'volume_up' }}</mat-icon>
+                {{ speaking ? 'Stop' : 'Listen' }}
+              </button>
+              <button mat-stroked-button type="button" (click)="speakSelection(noteEditor)"
+                      matTooltip="Read only the text you highlighted in the note">
+                <mat-icon>short_text</mat-icon> Selection
               </button>
               <button mat-flat-button color="primary" (click)="saveNote()">
                 <mat-icon>save</mat-icon> Save
@@ -51,8 +61,66 @@
             </div>
           </div>
 
-          <textarea class="sn-editor" [(ngModel)]="contentDraft" rows="18"
+          <textarea #noteEditor class="sn-editor" [(ngModel)]="contentDraft" rows="18"
                     placeholder="Start writing… Your lines stay private to your account."></textarea>
+
+          <section class="sn-coach card-ink">
+            <h3><mat-icon>record_voice_over</mat-icon> AI pronunciation coach</h3>
+            <p class="sn-coach-hint">
+              Keep <strong>Dictate</strong> for typing into the note. Here the mic only fills the box below; Ollama compares what you meant vs what was heard and suggests fixes (pace, stress, spelling aloud, etc.).
+            </p>
+            <mat-form-field appearance="outline" class="sn-coach-goal">
+              <mat-label>Practice line (optional if you select text in the note)</mat-label>
+              <textarea matInput rows="2" [(ngModel)]="coachGoalText"
+                        placeholder="e.g. The weather is beautiful today."></textarea>
+            </mat-form-field>
+            <div class="sn-coach-actions">
+              <button mat-stroked-button type="button" (click)="speakCoachTarget(noteEditor)" matTooltip="Hear the target before you practice">
+                <mat-icon>campaign</mat-icon> Hear target
+              </button>
+              <button mat-stroked-button type="button"
+                      [color]="micActive && micRoute === 'coach' ? 'warn' : 'accent'"
+                      (click)="toggleCoachMic()">
+                <mat-icon>{{ micActive && micRoute === 'coach' ? 'mic_off' : 'school' }}</mat-icon>
+                {{ micActive && micRoute === 'coach' ? 'Stop coach mic' : 'Coach mic' }}
+              </button>
+              <button mat-flat-button color="primary" type="button" (click)="runCoachAnalysis(noteEditor)"
+                      [disabled]="coachLoading || !coachHeard.trim()">
+                <mat-icon>psychology</mat-icon> Get AI feedback
+              </button>
+            </div>
+            <div class="sn-coach-live" *ngIf="coachHeard.trim() || (micActive && micRoute === 'coach')">
+              <span class="sn-coach-label">Heard (coach)</span>
+              <p class="sn-coach-transcript">{{ coachHeard || '…' }}</p>
+            </div>
+            <div class="sn-coach-loading" *ngIf="coachLoading">
+              <mat-icon class="spin">refresh</mat-icon> Asking your local model…
+            </div>
+            <div class="sn-coach-out" *ngIf="coachFeedback as cf">
+              <div class="sn-ai-gloss" *ngIf="cf.overallSummary">
+                <span class="sn-ai-badge"><mat-icon>psychology</mat-icon> Coach</span>
+                <p>{{ cf.overallSummary }}</p>
+              </div>
+              <ul class="sn-coach-items" *ngIf="cf.items?.length">
+                <li *ngFor="let it of cf.items">
+                  <strong>{{ it.issue }}</strong>
+                  <span class="fix">Say: <em>{{ it.correction }}</em></span>
+                  <span class="tip" *ngIf="it.tip">Tip: {{ it.tip }}</span>
+                </li>
+              </ul>
+              <ul class="sn-coach-tips" *ngIf="cf.overallTips?.length">
+                <li *ngFor="let t of cf.overallTips">{{ t }}</li>
+              </ul>
+              <div class="sn-coach-ideal" *ngIf="cf.idealSentence">
+                <span class="sn-coach-label">Practice this</span>
+                <p>{{ cf.idealSentence }}</p>
+                <button mat-stroked-button type="button" (click)="speakIdealSentence()">
+                  <mat-icon>volume_up</mat-icon> Listen to model line
+                </button>
+              </div>
+              <pre class="sn-coach-raw" *ngIf="cf.rawCoachText">{{ cf.rawCoachText }}</pre>
+            </div>
+          </section>
 
           <section class="sn-dictionary card-ink">
             <h3><mat-icon>menu_book</mat-icon> Smart dictionary</h3>

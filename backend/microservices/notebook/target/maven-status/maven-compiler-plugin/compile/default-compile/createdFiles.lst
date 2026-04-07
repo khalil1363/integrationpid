@@ -1,7 +1,9 @@
 esprit\notebook\dto\TextRequest.class
 esprit\notebook\service\GrammarService.class
 esprit\notebook\dto\SummaryResponse.class
+esprit\notebook\service\PronunciationCoachService.class
 esprit\notebook\service\GrammarService$Fix.class
+esprit\notebook\dto\PronunciationCoachRequest.class
 esprit\notebook\service\DictionaryService.class
 esprit\notebook\dto\DictionaryResponse.class
 esprit\notebook\NotebookApplication.class
@@ -15,4 +17,6 @@ esprit\notebook\controller\NotebookController.class
 esprit\notebook\model\Note.class
 esprit\notebook\service\SummaryService.class
 esprit\notebook\dto\GrammarResponse.class
+esprit\notebook\dto\PronunciationCoachResponse.class
+esprit\notebook\dto\PronunciationCoachItem.class
 esprit\notebook\repository\NoteRepository.class

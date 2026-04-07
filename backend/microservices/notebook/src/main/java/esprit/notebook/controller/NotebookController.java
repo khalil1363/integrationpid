@@ -4,6 +4,7 @@ import esprit.notebook.dto.*;
 import esprit.notebook.service.DictionaryService;
 import esprit.notebook.service.GrammarService;
 import esprit.notebook.service.NotebookService;
+import esprit.notebook.service.PronunciationCoachService;
 import esprit.notebook.service.SummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class NotebookController {
     private final GrammarService grammarService;
     private final DictionaryService dictionaryService;
     private final SummaryService summaryService;
+    private final PronunciationCoachService pronunciationCoachService;
 
     @GetMapping("/notes")
     public List<NoteDto> list(@RequestParam Long userId) {
@@ -69,6 +71,19 @@ public class NotebookController {
     @PostMapping("/ai/summarize")
     public SummaryResponse summarize(@RequestBody TextRequest req) {
         return summaryService.summarize(req.getText());
+    }
+
+    /** Open in browser after deploy: should return JSON (proves this build includes the coach). */
+    @GetMapping("/ai/pronunciation-coach")
+    public Map<String, Object> pronunciationCoachProbe() {
+        return Map.of(
+                "coach", "Smart Notebook pronunciation coach",
+                "post", "Send JSON body: { \"targetText\": \"...\", \"heardText\": \"...\" }");
+    }
+
+    @PostMapping("/ai/pronunciation-coach")
+    public PronunciationCoachResponse pronunciationCoach(@RequestBody PronunciationCoachRequest req) {
+        return pronunciationCoachService.coach(req.getTargetText(), req.getHeardText());
     }
 
     @ExceptionHandler({ NoSuchElementException.class })
