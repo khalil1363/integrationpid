@@ -97,28 +97,83 @@
               <mat-icon class="spin">refresh</mat-icon> Asking your local model…
             </div>
             <div class="sn-coach-out" *ngIf="coachFeedback as cf">
-              <div class="sn-ai-gloss" *ngIf="cf.overallSummary">
-                <span class="sn-ai-badge"><mat-icon>psychology</mat-icon> Coach</span>
-                <p>{{ cf.overallSummary }}</p>
+              <div class="sn-feedback-shell">
+                <ng-container *ngIf="cf.overallSummary">
+                  <div class="sn-feedback-block sn-feedback-overview">
+                    <div class="sn-feedback-block-head">
+                      <mat-icon class="sn-fh-ico">auto_stories</mat-icon>
+                      <h4 class="sn-feedback-heading">Overview</h4>
+                    </div>
+                    <div class="sn-feedback-summary-body">
+                      <ng-container *ngIf="summaryParagraphs(cf.overallSummary).length; else oneSummary">
+                        <p class="sn-feedback-para" *ngFor="let para of summaryParagraphs(cf.overallSummary)">{{ para }}</p>
+                      </ng-container>
+                      <ng-template #oneSummary>
+                        <p class="sn-feedback-para">{{ cf.overallSummary }}</p>
+                      </ng-template>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="cf.items?.length">
+                  <div class="sn-feedback-block">
+                    <div class="sn-feedback-block-head">
+                      <mat-icon class="sn-fh-ico">edit_note</mat-icon>
+                      <h4 class="sn-feedback-heading">Word &amp; phrase fixes</h4>
+                    </div>
+                    <div class="sn-feedback-cards">
+                      <article class="sn-feedback-card" *ngFor="let it of cf.items; let idx = index">
+                        <div class="sn-feedback-card-top">
+                          <span class="sn-feedback-badge">{{ idx + 1 }}</span>
+                          <h5 class="sn-feedback-issue">{{ it.issue }}</h5>
+                        </div>
+                        <div class="sn-feedback-say">
+                          <span class="sn-feedback-say-label">Say it like this</span>
+                          <p class="sn-feedback-say-text">{{ it.correction }}</p>
+                        </div>
+                        <div class="sn-feedback-tip-row" *ngIf="it.tip">
+                          <mat-icon class="sn-tip-ico">lightbulb</mat-icon>
+                          <p class="sn-feedback-tip-text">{{ it.tip }}</p>
+                        </div>
+                      </article>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="cf.overallTips?.length">
+                  <div class="sn-feedback-block sn-feedback-tips-block">
+                    <div class="sn-feedback-block-head">
+                      <mat-icon class="sn-fh-ico">graphic_eq</mat-icon>
+                      <h4 class="sn-feedback-heading">How to sound better</h4>
+                    </div>
+                    <ol class="sn-feedback-tip-list">
+                      <li *ngFor="let tip of cf.overallTips">
+                        <span class="sn-tip-bullet"></span>
+                        <span class="sn-tip-content">{{ tip }}</span>
+                      </li>
+                    </ol>
+                  </div>
+                </ng-container>
+
+                <div class="sn-feedback-block sn-feedback-practice" *ngIf="cf.idealSentence">
+                  <div class="sn-feedback-block-head">
+                    <mat-icon class="sn-fh-ico">format_quote</mat-icon>
+                    <h4 class="sn-feedback-heading">Line to practice</h4>
+                  </div>
+                  <blockquote class="sn-feedback-quote">{{ cf.idealSentence }}</blockquote>
+                  <button mat-stroked-button type="button" class="sn-feedback-tts" (click)="speakIdealSentence()">
+                    <mat-icon>volume_up</mat-icon> Listen to this line
+                  </button>
+                </div>
+
+                <div class="sn-feedback-block sn-feedback-raw" *ngIf="cf.rawCoachText">
+                  <div class="sn-feedback-block-head">
+                    <mat-icon class="sn-fh-ico">description</mat-icon>
+                    <h4 class="sn-feedback-heading">Full coach reply</h4>
+                  </div>
+                  <pre class="sn-coach-raw">{{ cf.rawCoachText }}</pre>
+                </div>
               </div>
-              <ul class="sn-coach-items" *ngIf="cf.items?.length">
-                <li *ngFor="let it of cf.items">
-                  <strong>{{ it.issue }}</strong>
-                  <span class="fix">Say: <em>{{ it.correction }}</em></span>
-                  <span class="tip" *ngIf="it.tip">Tip: {{ it.tip }}</span>
-                </li>
-              </ul>
-              <ul class="sn-coach-tips" *ngIf="cf.overallTips?.length">
-                <li *ngFor="let t of cf.overallTips">{{ t }}</li>
-              </ul>
-              <div class="sn-coach-ideal" *ngIf="cf.idealSentence">
-                <span class="sn-coach-label">Practice this</span>
-                <p>{{ cf.idealSentence }}</p>
-                <button mat-stroked-button type="button" (click)="speakIdealSentence()">
-                  <mat-icon>volume_up</mat-icon> Listen to model line
-                </button>
-              </div>
-              <pre class="sn-coach-raw" *ngIf="cf.rawCoachText">{{ cf.rawCoachText }}</pre>
             </div>
           </section>
 

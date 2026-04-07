@@ -346,6 +346,21 @@ export class SmartNotebookComponent implements OnInit, OnDestroy {
     this.speakText(s);
   }
 
+  /** Split AI summary into readable paragraphs for the template. */
+  summaryParagraphs(text: string | null | undefined): string[] {
+    if (!text?.trim()) {
+      return [];
+    }
+    const t = text.trim();
+    if (/\n/.test(t)) {
+      return t.split(/\n+/).map((s) => s.trim()).filter((s) => s.length > 0);
+    }
+    if (t.length > 220) {
+      return t.split(/(?<=[.!?])\s+/).map((s) => s.trim()).filter((s) => s.length > 0);
+    }
+    return [t];
+  }
+
   private ttsAvailable(): boolean {
     return isPlatformBrowser(this.platformId) && typeof window !== 'undefined' && !!window.speechSynthesis;
   }
