@@ -237,6 +237,27 @@
   margin-bottom: 0.5rem;
 }
 
+.sn-coach-voice-opts {
+  margin-bottom: 1rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(99, 102, 241, 0.06);
+  border: 1px solid rgba(99, 102, 241, 0.12);
+}
+
+.sn-coach-voice-opts mat-checkbox {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.sn-coach-voice-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .sn-coach-actions {
   display: flex;
   flex-wrap: wrap;

@@ -67,8 +67,22 @@
           <section class="sn-coach card-ink">
             <h3><mat-icon>record_voice_over</mat-icon> AI pronunciation coach</h3>
             <p class="sn-coach-hint">
-              Keep <strong>Dictate</strong> for typing into the note. Here the mic only fills the box below; Ollama compares what you meant vs what was heard and suggests fixes (pace, stress, spelling aloud, etc.).
+              <strong>Coach mic</strong>: speak, then tap <strong>Stop &amp; analyze</strong> — grammar + pronunciation run automatically and the coach <strong>talks back briefly</strong> (no extra button needed). Full detail stays on screen. <strong>Dictate</strong> still only fills your note.
             </p>
+            <div class="sn-coach-voice-opts">
+              <mat-checkbox [(ngModel)]="coachSpeakFeedback" color="primary">
+                Short voice when I stop coach mic (phrase twice, then spelling guide)
+              </mat-checkbox>
+              <div class="sn-coach-voice-btns">
+                <button mat-stroked-button type="button" (click)="replayCoachVoice()"
+                        [disabled]="(!coachFeedback && !coachGrammarResult) || coachLoading" matTooltip="Replay the short voice clip">
+                  <mat-icon>record_voice_over</mat-icon> Replay voice
+                </button>
+                <button mat-stroked-button type="button" color="warn" (click)="stopSpeaking()" *ngIf="speaking">
+                  <mat-icon>stop</mat-icon> Stop voice
+                </button>
+              </div>
+            </div>
             <mat-form-field appearance="outline" class="sn-coach-goal">
               <mat-label>Practice line (optional if you select text in the note)</mat-label>
               <textarea matInput rows="2" [(ngModel)]="coachGoalText"
@@ -80,13 +94,13 @@
               </button>
               <button mat-stroked-button type="button"
                       [color]="micActive && micRoute === 'coach' ? 'warn' : 'accent'"
-                      (click)="toggleCoachMic()">
+                      (click)="toggleCoachMic(noteEditor)">
                 <mat-icon>{{ micActive && micRoute === 'coach' ? 'mic_off' : 'school' }}</mat-icon>
-                {{ micActive && micRoute === 'coach' ? 'Stop coach mic' : 'Coach mic' }}
+                {{ micActive && micRoute === 'coach' ? 'Stop & analyze' : 'Coach mic' }}
               </button>
-              <button mat-flat-button color="primary" type="button" (click)="runCoachAnalysis(noteEditor)"
+              <button mat-stroked-button color="primary" type="button" (click)="runCoachAnalysis(noteEditor)"
                       [disabled]="coachLoading || !coachHeard.trim()">
-                <mat-icon>psychology</mat-icon> Get AI feedback
+                <mat-icon>psychology</mat-icon> Analyze again
               </button>
             </div>
             <div class="sn-coach-live" *ngIf="coachHeard.trim() || (micActive && micRoute === 'coach')">
@@ -96,8 +110,27 @@
             <div class="sn-coach-loading" *ngIf="coachLoading">
               <mat-icon class="spin">refresh</mat-icon> Asking your local model…
             </div>
-            <div class="sn-coach-out" *ngIf="coachFeedback as cf">
+            <div class="sn-coach-out" *ngIf="coachFeedback || coachGrammarResult">
               <div class="sn-feedback-shell">
+                <ng-container *ngIf="coachGrammarResult as gr">
+                  <div class="sn-feedback-block sn-feedback-grammar" *ngIf="coachGrammarShowOnScreen(gr)">
+                    <div class="sn-feedback-block-head">
+                      <mat-icon class="sn-fh-ico">spellcheck</mat-icon>
+                      <h4 class="sn-feedback-heading">Grammar</h4>
+                    </div>
+                    <p class="sn-grammar-heard" *ngIf="coachHeardWhenAnalyzed || coachHeard">
+                      <span class="sn-coach-label">You said</span>
+                      {{ coachHeardWhenAnalyzed || coachHeard }}
+                    </p>
+                    <div class="sn-feedback-say">
+                      <span class="sn-feedback-say-label">Corrected</span>
+                      <p class="sn-feedback-say-text">{{ gr.correctedText }}</p>
+                    </div>
+                    <p class="sn-grammar-meta" *ngIf="gr.source">via {{ gr.source === 'ollama' ? 'Ollama' : gr.source === 'languagetool' ? 'LanguageTool' : gr.source }}</p>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="coachFeedback as cf">
                 <ng-container *ngIf="cf.overallSummary">
                   <div class="sn-feedback-block sn-feedback-overview">
                     <div class="sn-feedback-block-head">
@@ -173,6 +206,7 @@
                   </div>
                   <pre class="sn-coach-raw">{{ cf.rawCoachText }}</pre>
                 </div>
+                </ng-container>
               </div>
             </div>
           </section>
